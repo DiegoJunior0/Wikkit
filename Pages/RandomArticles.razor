@@ -1,0 +1,41 @@
+﻿@page "/random"
+@using Wikkit.Data
+@inject WikipediaDataService wikipediaDataService
+
+@if (articles == null || articles.Count == 0)
+{
+    <div>Loading...</div>
+} else
+{
+    <InfiniteScroll ObserverTargetId="observerTarget" ObservableTargetReached="(e) => GetArticles(loadMore)">
+
+        @foreach (var article in articles)
+        {
+            <ArticleCard HeaderData=article />
+        }
+
+        <span id="observerTarget"></span>
+
+    </InfiniteScroll>
+    
+}
+
+
+@code {
+    List<ArticleHeaderData> articles = new();
+
+    private const int loadOnStart = 30;
+    private const int loadMore = 10;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await GetArticles(loadOnStart);
+    }
+
+    private async Task GetArticles(int articleCount)
+    {
+        var newArticles = await wikipediaDataService.GetRandomArticles(articleCount);
+        articles.AddRange(newArticles);
+    }
+
+}

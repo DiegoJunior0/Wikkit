@@ -1,0 +1,97 @@
+﻿@using Wikkit.Data;
+@inject WikipediaDataService wikipediaDataService
+
+<div class="articlecard m-1 p-2 card bg-dark" @onclick=OpenLink>
+    @if (articleData == null)
+    {
+        <PlaceholderContainer Animation="PlaceholderAnimation.Glow">
+            <Placeholder Width="PlaceholderWidth.Col7" />
+            <Placeholder Width="PlaceholderWidth.Col9" />
+        </PlaceholderContainer>
+    } else
+    {
+        <div class="articleContent row">
+
+            <div class="articletext col-12">
+
+                <div class="card-title text-white w-100 mb-1"><strong>@articleData.title</strong></div>
+
+                @if (articleData.thumbnail != null)
+                {
+                    <img src="@articleData.thumbnail.source" class="card-img float-end w-25 ms-1 mb-1" />
+                }
+                @if (FirstParagraph != null && FirstParagraph.Length > 0)
+                {
+                    <p class="text-light mb-0">@FirstParagraph</p>
+                }
+            </div>         
+
+        </div>     
+
+    }
+</div>
+
+@code {
+    [Parameter]
+    public ArticleHeaderData HeaderData { get; set; }
+
+    private ArticlePageData articleData;
+
+    public string FirstParagraph;
+    private const int minParagraphLength = 50;
+    private const int maxParagraphLength = 400;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (HeaderData == null) return;
+
+        articleData = await wikipediaDataService.GetArticleInfo(HeaderData.id);
+
+        GetFirstParagraph();
+
+    }
+
+    private void GetFirstParagraph()
+    {
+        if (articleData == null) return;
+
+        if (articleData.extract == null || articleData.extract.Length == 0) return;
+
+        HtmlDocument htmlDoc = new();
+        htmlDoc.LoadHtml(articleData.extract);
+
+        FirstParagraph = "";
+
+        foreach (HtmlNode node in htmlDoc.DocumentNode.SelectNodes("//p"))
+        {
+            if (node.InnerLength <= 2) continue;
+
+            FirstParagraph += node.InnerText;
+
+            if (FirstParagraph == "" || FirstParagraph.Length < minParagraphLength) continue;
+
+            break;
+        }
+
+        int safety = 0;
+
+        while (FirstParagraph.Length > maxParagraphLength & safety < 100)
+        {
+            int lastPeriodIndex = FirstParagraph.LastIndexOf('.');
+            if (lastPeriodIndex == -1)
+                break;
+
+            FirstParagraph = FirstParagraph.Substring(0, lastPeriodIndex);
+
+            safety++;
+        }
+
+    }
+
+    private void OpenLink()
+    {
+        Uri uri = new Uri(articleData.fullurl);
+        Browser.Default.OpenAsync(uri, BrowserLaunchMode.SystemPreferred);
+    }
+
+}
