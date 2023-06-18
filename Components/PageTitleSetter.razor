@@ -1,0 +1,15 @@
+﻿
+
+@code {
+
+    [Parameter]
+    public string PageTitle { get; set; }
+
+    [CascadingParameter]
+    public MainLayout Layout { get; set; }
+
+    protected override void OnInitialized()
+    {
+        Layout.PageTitle = PageTitle;
+    }
+}

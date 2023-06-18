@@ -2,6 +2,8 @@
 @using Wikkit.Data
 @inject WikipediaDataService wikipediaDataService
 
+<PageTitleSetter PageTitle="Random" />
+
 @if (articles == null || articles.Count == 0)
 {
     <div>Loading...</div>
@@ -26,9 +28,7 @@
     List<ArticlePageData> articles = new();
 
     private const int loadOnStart = 20;
-    private const int loadMore = 10;
-
-
+    private const int loadMore = 10;    
 
     protected override async Task OnInitializedAsync()
     {

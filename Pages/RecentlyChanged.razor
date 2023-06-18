@@ -2,6 +2,8 @@
 @using Wikkit.Data;
 @inject WikipediaDataService dataService;
 
+<PageTitleSetter PageTitle="Recently Changed" />
+
 @if (articles == null || articles.Count == 0)
 {
     <div>Loading...</div>

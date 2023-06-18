@@ -1,17 +1,35 @@
 ﻿@inherits LayoutComponentBase
 
-<div class="page bg-black min-vh-100">
-    <div class="bg-dark">        
-        <NavMenu />
-    </div>
+<CascadingValue Value="this">
+    <div class="page bg-black min-vh-100">    
 
-    <main>
-        <div class="top-row px-4">
-            <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
+        <div class="bg-dark">        
+            <NavMenu PageTitle=@_pagetitle />
         </div>
 
-        <article class="content px-2">
-            @Body
-        </article>
-    </main>
-</div>
+        <main>
+            <div class="top-row px-4">
+                <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
+            </div>
+
+            <article class="content px-2">
+                @Body
+            </article>
+        </main>
+    </div>
+</CascadingValue>
+
+@code
+{
+    private string _pagetitle;
+
+    public string PageTitle
+    {
+        get => _pagetitle;
+        set
+        {
+            _pagetitle = value;
+            InvokeAsync(() => StateHasChanged());
+        }
+    }
+}
