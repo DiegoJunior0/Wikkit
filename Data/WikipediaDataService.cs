@@ -82,18 +82,18 @@ public partial class WikipediaDataService
 
     }
 
-    public async Task<List<ArticlePageData>> GetRecentlyChanged(int offset)
+    public async Task<List<ArticlePageData>> GetRecentlyChanged()
     {
         UriBuilder url = new UriBuilder(apiEndpoint)
         {
-            Query = $"action=query&format=json&prop=info|pageprops|pageimages|description|extracts&exintro=true&generator=recentchanges&inprop=url&grcnamespace=0&grclimit=10&grccontinue={offset}"
+            Query = $"action=query&format=json&prop=info|pageprops|pageimages|description|extracts&exintro=true&generator=recentchanges&inprop=url&grcnamespace=0&grclimit=10"
         };
 
         string jsonString = await _client.GetStringAsync(url.Uri.AbsoluteUri);
 
         var data = JsonSerializer.Deserialize<QueryResponseInfo>(jsonString);
 
-        return data.query.pages.Values.Where(p => p.ns != -1).ToList();
+        return data.query.pages.Values.ToList();
 
     }
 
