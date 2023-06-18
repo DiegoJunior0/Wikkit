@@ -88,6 +88,9 @@
             safety++;
         }
 
+        if (FirstParagraph.Trim() == "")
+            FirstParagraph = ArticleData.description;
+
     }
 
     private void OpenLink()
