@@ -32,6 +32,8 @@ else
     private int viewedIndex = 0;
     private const int articleCount = 10;
 
+    private string _cont = "";
+
     protected override async Task OnInitializedAsync()
     {
         await GetArticles();
@@ -39,9 +41,11 @@ else
 
     private async Task GetArticles()
     {
-        var newArticles = await dataService.GetRecentlyChanged(articleCount);
+        (var newArticles, string cont) = await dataService.GetRecentlyChanged(articleCount, _cont);
 
         articles.AddRange(newArticles);
+
+        _cont = cont;
 
         viewedIndex += articleCount;
     }

@@ -17,27 +17,13 @@ public partial class WikipediaDataService
         _client = client;
     }
 
-    public async Task<ArticleHeaderData> GetRandomArticle()
-    {
-        UriBuilder builder = new(apiEndpoint)
-        {
-            Query = "action=query&format=json&list=random&rnnamespace=0"
-        };
-
-        string jsonString = await _client.GetStringAsync(builder.Uri.AbsoluteUri);
-
-        // Deserialize the JSON string
-        QueryResponseRandom data = JsonSerializer.Deserialize<QueryResponseRandom>(jsonString);
-
-        return data.query.random[0];
-    }
-
     public async Task<List<ArticlePageData>> GetRandomArticles(int articleCount)
     {
 
         UriBuilder builder = new(apiEndpoint)
         {
-            Query = $"action=query&format=json&prop=info|pageimages|description|pageprops|extracts&generator=random&inprop=url&exintro=1&grnnamespace=0&grnlimit={articleCount}"
+            Query = $"action=query&format=json&prop=info|pageimages|description|pageprops|extracts" +
+            $"&generator=random&inprop=url&exintro=1&grnnamespace=0&grnlimit={articleCount}"
         };
 
         string jsonString = await _client.GetStringAsync(builder.Uri.AbsoluteUri);
@@ -71,29 +57,34 @@ public partial class WikipediaDataService
     {
         UriBuilder url = new UriBuilder(apiEndpoint)
         {
-            Query = $"action=query&format=json&prop=info|pageprops|pageimages|description|extracts&exintro=true&generator=mostviewed&inprop=url&gpvimlimit={count}&gpvimoffset={offset}"
+            Query = $"action=query&format=json&prop=info|pageprops|pageimages|description|extracts" +
+            $"&exintro=true&generator=mostviewed&inprop=url&gpvimlimit={count}&gpvimoffset={offset}"
         };
 
         string jsonString = await _client.GetStringAsync(url.Uri.AbsoluteUri);
-
+        
         var data = JsonSerializer.Deserialize<QueryResponseInfo>(jsonString);
 
         return data.query.pages.Values.Where(p => p.ns != -1).ToList();
 
     }
 
-    public async Task<List<ArticlePageData>> GetRecentlyChanged(int count)
+    public async Task<(List<ArticlePageData>, string @continue)> GetRecentlyChanged(int count, string cont = "")
     {
         UriBuilder url = new UriBuilder(apiEndpoint)
         {
-            Query = $"action=query&format=json&prop=info|pageprops|pageimages|description|extracts&exintro=true&generator=recentchanges&inprop=url&grcnamespace=0&grclimit=10"
+            Query = $"action=query&format=json&prop=info|pageprops|pageimages|description|extracts" +
+            $"&exintro=true&generator=recentchanges&inprop=url&grcnamespace=0&grclimit={count}"
         };
+
+        if (cont != "")
+            url.Query += $"&grccontinue={cont}";
 
         string jsonString = await _client.GetStringAsync(url.Uri.AbsoluteUri);
 
-        var data = JsonSerializer.Deserialize<QueryResponseInfo>(jsonString);
+        var data = JsonSerializer.Deserialize<QueryResponeWContinue>(jsonString);
 
-        return data.query.pages.Values.ToList();
+        return (data.query.pages.Values.ToList(), data.@continue["grccontinue"]);
 
     }
 
@@ -115,33 +106,15 @@ public partial class WikipediaDataService
 
     }
 
-    private class QueryDataRandom
-    {
-        public List<ArticleHeaderData> random { get; set; }
-    }
-
-    private class QueryResponseRandom
-    {
-        public string batchcomplete { get; set; }
-        public QueryDataRandom query { get; set; }
-    }
-
     private class QueryResponseInfo
     {
-        public string batchcomplete { get; set; }
-        public WarningData warnings { get; set; }
         public QueryDataInfo query { get; set;}
     }
 
-    private class WarningData
+    private class QueryResponeWContinue
     {
-        public Extracts extracts { get; set; }
-    }
-
-    public partial class Extracts
-    {
-        [JsonPropertyName("*")]
-        public string Empty { get; set; }
+        public QueryDataInfo query { get; set; }
+        public Dictionary<string, string> @continue { get; set; }
     }
 
     private class QueryDataInfo
