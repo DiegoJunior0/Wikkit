@@ -2,7 +2,7 @@
 @inject WikipediaDataService wikipediaDataService
 
 <div class="articlecard m-1 p-2 card bg-dark" @onclick=OpenLink>
-    @if (articleData == null)
+    @if (ArticleData == null)
     {
         <PlaceholderContainer Animation="PlaceholderAnimation.Glow">
             <Placeholder Width="PlaceholderWidth.Col7" />
@@ -14,11 +14,11 @@
 
             <div class="articletext col-12">
 
-                <div class="card-title text-white w-100 mb-1"><strong>@articleData.title</strong></div>
+                <div class="card-title text-white w-100 mb-1"><strong>@ArticleData.title</strong></div>
 
-                @if (articleData.thumbnail != null)
+                @if (ArticleData.thumbnail != null)
                 {
-                    <img src="@articleData.thumbnail.source" class="card-img float-end w-25 ms-1 mb-1" />
+                    <img src="@ArticleData.thumbnail.source" class="card-img float-end w-25 ms-1 mb-1" />
                 }
                 @if (FirstParagraph != null && FirstParagraph.Length > 0)
                 {
@@ -35,7 +35,8 @@
     [Parameter]
     public ArticleHeaderData HeaderData { get; set; }
 
-    private ArticlePageData articleData;
+    [Parameter]
+    public ArticlePageData ArticleData { get; set; }
 
     public string FirstParagraph;
     private const int minParagraphLength = 50;
@@ -43,9 +44,10 @@
 
     protected override async Task OnInitializedAsync()
     {
-        if (HeaderData == null) return;
+        if (HeaderData == null & ArticleData == null) return;
 
-        articleData = await wikipediaDataService.GetArticleInfo(HeaderData.id);
+        if (ArticleData == null)
+            ArticleData = await wikipediaDataService.GetArticleInfo(HeaderData.id);
 
         GetFirstParagraph();
 
@@ -53,12 +55,12 @@
 
     private void GetFirstParagraph()
     {
-        if (articleData == null) return;
+        if (ArticleData == null) return;
 
-        if (articleData.extract == null || articleData.extract.Length == 0) return;
+        if (ArticleData.extract == null || ArticleData.extract.Length == 0) return;
 
         HtmlDocument htmlDoc = new();
-        htmlDoc.LoadHtml(articleData.extract);
+        htmlDoc.LoadHtml(ArticleData.extract);
 
         FirstParagraph = "";
 
@@ -90,7 +92,7 @@
 
     private void OpenLink()
     {
-        Uri uri = new Uri(articleData.fullurl);
+        Uri uri = new Uri(ArticleData.fullurl);
         Browser.Default.OpenAsync(uri, BrowserLaunchMode.SystemPreferred);
     }
 

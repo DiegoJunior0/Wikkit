@@ -11,21 +11,24 @@
 
         @foreach (var article in articles)
         {
-            <ArticleCard HeaderData=article />
+            <ArticleCard ArticleData=article />
         }
 
-        <span id="observerTarget"></span>
-
+        <span id="observerTarget">
+            <ArticleCard />
+        </span>
     </InfiniteScroll>
     
 }
 
 
 @code {
-    List<ArticleHeaderData> articles = new();
+    List<ArticlePageData> articles = new();
 
-    private const int loadOnStart = 30;
+    private const int loadOnStart = 20;
     private const int loadMore = 10;
+
+
 
     protected override async Task OnInitializedAsync()
     {

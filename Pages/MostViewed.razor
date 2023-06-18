@@ -1,0 +1,47 @@
+﻿@page "/mostviewed"
+@using Wikkit.Data;
+@inject WikipediaDataService dataService;
+
+@if (articles == null || articles.Count == 0)
+{
+    <div>Loading...</div>
+}
+else
+{
+    <InfiniteScroll ObserverTargetId="observerTarget" ObservableTargetReached="(e) => GetArticles()">
+
+        @foreach (var article in articles)
+        {
+            <ArticleCard ArticleData=article />
+        }
+
+        <span id="observerTarget">
+            <ArticleCard />
+        </span>
+
+    </InfiniteScroll>
+
+}
+
+@code {
+
+    List<ArticlePageData> articles = new();
+
+    private int viewedIndex = 0;
+    private const int articleCount = 10;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await GetArticles();
+    }
+
+    private async Task GetArticles()
+    {
+        var newArticles = await dataService.GetMostViewed(viewedIndex);
+
+        articles.AddRange(newArticles);
+
+        viewedIndex += articleCount;
+    }
+
+}

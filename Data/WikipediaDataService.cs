@@ -32,33 +32,26 @@ public partial class WikipediaDataService
         return data.query.random[0];
     }
 
-    public async Task<List<ArticleHeaderData>> GetRandomArticles(int articleCount)
+    public async Task<List<ArticlePageData>> GetRandomArticles(int articleCount)
     {
 
         UriBuilder builder = new(apiEndpoint)
         {
-            Query = $"action=query&format=json&list=random&rnnamespace=0&rnlimit={articleCount}"
+            Query = $"action=query&format=json&prop=info|pageimages|description|pageprops|extracts&generator=random&inprop=url&exintro=1&grnnamespace=0&grnlimit={articleCount}"
         };
 
         string jsonString = await _client.GetStringAsync(builder.Uri.AbsoluteUri);
 
         // Deserialize the JSON string
-        QueryResponseRandom data = JsonSerializer.Deserialize<QueryResponseRandom>(jsonString);
+        var data = JsonSerializer.Deserialize<QueryResponseInfo>(jsonString);
 
-        // Access the title values
-        List<ArticleHeaderData> titles = new();
-        foreach (var item in data.query.random)
-        {
-            titles.Add(item);
-        }
-
-        return titles;
+        return data.query.pages.Values.ToList();
     }
 
     public async Task<ArticlePageData> GetArticleInfo(int articleID)
     {
 
-        UriBuilder url = new UriBuilder("https://en.wikipedia.org/w/api.php")
+        UriBuilder url = new UriBuilder(apiEndpoint)
         {
             Query = $"action=query&format=json&pageids={articleID}&prop=info|pageimages|description|pageprops|extracts&inprop=url"
         };
@@ -71,6 +64,21 @@ public partial class WikipediaDataService
         ArticlePageData articlePageData = data.query.pages[articleID.ToString()];       
 
         return articlePageData;  
+
+    }
+
+    public async Task<List<ArticlePageData>> GetMostViewed(int offset)
+    {
+        UriBuilder url = new UriBuilder(apiEndpoint)
+        {
+            Query = $"action=query&format=json&prop=info|pageprops|pageimages|description|extracts&exintro=true&generator=mostviewed&inprop=url&gpvimlimit=10&gpvimoffset={offset}"
+        };
+
+        string jsonString = await _client.GetStringAsync(url.Uri.AbsoluteUri);
+
+        var data = JsonSerializer.Deserialize<QueryResponseInfo>(jsonString);
+
+        return data.query.pages.Values.ToList();
 
     }
 
