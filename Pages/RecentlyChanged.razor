@@ -37,7 +37,7 @@ else
 
     private async Task GetArticles()
     {
-        var newArticles = await dataService.GetRecentlyChanged();
+        var newArticles = await dataService.GetRecentlyChanged(articleCount);
 
         articles.AddRange(newArticles);
 

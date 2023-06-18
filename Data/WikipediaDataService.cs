@@ -67,11 +67,11 @@ public partial class WikipediaDataService
 
     }
 
-    public async Task<List<ArticlePageData>> GetMostViewed(int offset)
+    public async Task<List<ArticlePageData>> GetMostViewed(int count, int offset)
     {
         UriBuilder url = new UriBuilder(apiEndpoint)
         {
-            Query = $"action=query&format=json&prop=info|pageprops|pageimages|description|extracts&exintro=true&generator=mostviewed&inprop=url&gpvimlimit=10&gpvimoffset={offset}"
+            Query = $"action=query&format=json&prop=info|pageprops|pageimages|description|extracts&exintro=true&generator=mostviewed&inprop=url&gpvimlimit={count}&gpvimoffset={offset}"
         };
 
         string jsonString = await _client.GetStringAsync(url.Uri.AbsoluteUri);
@@ -82,7 +82,7 @@ public partial class WikipediaDataService
 
     }
 
-    public async Task<List<ArticlePageData>> GetRecentlyChanged()
+    public async Task<List<ArticlePageData>> GetRecentlyChanged(int count)
     {
         UriBuilder url = new UriBuilder(apiEndpoint)
         {
