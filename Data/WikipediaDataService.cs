@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -17,16 +18,44 @@ public partial class WikipediaDataService
         _client = client;
     }
 
+    private async Task<string> GetWikiJson(string query)
+    {
+
+        try
+        {
+            UriBuilder url = new UriBuilder(apiEndpoint)
+            {
+                Query = query
+            };
+
+            HttpResponseMessage response = await _client.GetAsync(url.Uri.AbsoluteUri);
+
+            if (response.IsSuccessStatusCode)
+            {
+                string json = await response.Content.ReadAsStringAsync();
+                return json;
+            }
+
+            Debug.WriteLine(response.ReasonPhrase);
+            return "";
+            
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex.Message);
+            return "";  
+            throw;
+        }
+
+    }
+
     public async Task<List<ArticlePageData>> GetRandomArticles(int articleCount)
     {
 
-        UriBuilder builder = new(apiEndpoint)
-        {
-            Query = $"action=query&format=json&prop=info|pageimages|description|pageprops|extracts" +
-            $"&generator=random&inprop=url&exintro=1&grnnamespace=0&grnlimit={articleCount}"
-        };
+        string query = $"action=query&format=json&prop=info|pageimages|description|extracts" +
+        $"&generator=random&inprop=url&exsentences=5&exintro=1&explaintext=1&grnnamespace=0&grnlimit={articleCount}";
 
-        string jsonString = await _client.GetStringAsync(builder.Uri.AbsoluteUri);
+        string jsonString = await GetWikiJson(query);
 
         // Deserialize the JSON string
         var data = JsonSerializer.Deserialize<QueryResponseInfo>(jsonString);
@@ -37,13 +66,10 @@ public partial class WikipediaDataService
     public async Task<ArticlePageData> GetArticleInfo(int articleID)
     {
 
-        UriBuilder url = new UriBuilder(apiEndpoint)
-        {
-            Query = $"action=query&format=json&pageids={articleID}&prop=info|pageimages|description|pageprops|extracts&inprop=url"
-        };
+        string query = $"action=query&format=json&pageids={articleID}" +
+            $"&prop=info|pageimages|description|extracts&inprop=url";
 
-        //string url = $"https://en.wikipedia.org/w/api.php?action=query&format=json&pageids={articleID}&prop=info|images|description|pageprops|extracts&inprop=url";
-        string jsonString = await _client.GetStringAsync(url.Uri.AbsoluteUri);
+        string jsonString = await GetWikiJson(query);
 
         var data = JsonSerializer.Deserialize<QueryResponseInfo>(jsonString);
 
@@ -55,14 +81,12 @@ public partial class WikipediaDataService
 
     public async Task<List<ArticlePageData>> GetMostViewed(int count, int offset)
     {
-        UriBuilder url = new UriBuilder(apiEndpoint)
-        {
-            Query = $"action=query&format=json&prop=info|pageprops|pageimages|description|extracts" +
-            $"&exintro=true&generator=mostviewed&inprop=url&gpvimlimit={count}&gpvimoffset={offset}"
-        };
 
-        string jsonString = await _client.GetStringAsync(url.Uri.AbsoluteUri);
-        
+        string query = $"action=query&format=json&prop=info|pageimages|description|extracts" +
+        $"&exsentences=5&exintro=1&explaintext=1&generator=mostviewed&inprop=url&gpvimlimit={count}&gpvimoffset={offset}";
+
+        string jsonString = await GetWikiJson(query);
+
         var data = JsonSerializer.Deserialize<QueryResponseInfo>(jsonString);
 
         return data.query.pages.Values.Where(p => p.ns != -1).ToList();
@@ -71,16 +95,13 @@ public partial class WikipediaDataService
 
     public async Task<(List<ArticlePageData>, string @continue)> GetRecentlyChanged(int count, string cont = "")
     {
-        UriBuilder url = new UriBuilder(apiEndpoint)
-        {
-            Query = $"action=query&format=json&prop=info|pageprops|pageimages|description|extracts" +
-            $"&exintro=true&generator=recentchanges&inprop=url&grcnamespace=0&grclimit={count}"
-        };
+        string query = $"action=query&format=json&prop=info|pageimages|description|extracts" +
+            $"&exsentences=5&exintro=1&explaintext=1&generator=recentchanges&inprop=url&grcnamespace=0&grclimit={count}";
 
         if (cont != "")
-            url.Query += $"&grccontinue={cont}";
+            query += $"&grccontinue={cont}";
 
-        string jsonString = await _client.GetStringAsync(url.Uri.AbsoluteUri);
+        string jsonString = await GetWikiJson(query);
 
         var data = JsonSerializer.Deserialize<QueryResponeWContinue>(jsonString);
 
@@ -88,21 +109,21 @@ public partial class WikipediaDataService
 
     }
 
-    private async Task<string> GetImageUrl(string imageTitle)
+    public async Task<List<ArticlePageData>> GetCurrentEvents(DateTime date)
     {
-        UriBuilder url = new UriBuilder("https://en.wikipedia.org/w/api.php")
-        {
-            Query = $"action=query&format=json&prop=imageinfo&iiprop=url&titles={imageTitle}"
-        };
+        //action=query&format=json&prop=info%7Cdescription%7Cextracts&titles=Portal%3ACurrent_events%2F2023_June_19
+        //&generator=links&inprop=url&exsentences=5&exintro=1&explaintext=1&gplnamespace=0&gpllimit=50
 
-        string jsonString = await _client.GetStringAsync(url.Uri.AbsoluteUri);
+        string dateString = date.ToString("yyyy_MMMM_dd");
 
-        JsonDocument data = JsonDocument.Parse(jsonString);
+        string query = $"action=query&format=json&prop=info|pageimages|description|extracts&titles=Portal:Current_events/{dateString}" +
+            $"&generator=links&inprop=url&exsentences=5&exintro=1&explaintext=1&gplnamespace=0&gpllimit=50";
 
-        string imageurl = data.RootElement.GetProperty("query")
-    .GetProperty("pages").EnumerateObject().First().Value.GetProperty("imageinfo")[0].GetProperty("url").GetString();
+        string jsonString= await GetWikiJson(query);
 
-        return imageurl;
+        var data = JsonSerializer.Deserialize<QueryResponseInfo>(jsonString);
+
+        return data.query.pages.Values.ToList();
 
     }
 

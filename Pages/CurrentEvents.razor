@@ -1,0 +1,56 @@
+﻿@page "/currentevents"
+@using Wikkit.Data;
+@inject WikipediaDataService dataService;
+
+<PageTitleSetter PageTitle="Current Events" />
+
+@if (articles == null || articles.Count == 0)
+{
+    <div>Loading...</div>
+}
+else
+{
+    <InfiniteScroll ObserverTargetId="observerTarget" ObservableTargetReached="(e) => GetArticles()">
+
+        @foreach (var article in articles)
+        {
+            <ArticleCard ArticleData=article />
+        }
+
+        <span id="observerTarget">
+            <ArticleCard />
+        </span>
+
+    </InfiniteScroll>
+
+}
+
+@code {
+    List<ArticlePageData> articles = new();
+
+    int daysOffset = 0;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await GetArticles();
+    }
+
+    private async Task GetArticles()
+    {
+
+        DateTime date = DateTime.Now.AddDays(-daysOffset);
+
+        var newArticles = await dataService.GetCurrentEvents(date);
+
+        ArticlePageData dateHeaderArticle = new();
+        dateHeaderArticle.title = date.ToString("yyyy MMMM dd");
+
+        articles.Add(dateHeaderArticle);
+
+        articles.AddRange(newArticles);
+
+        daysOffset++;
+
+    }
+
+}

@@ -18,7 +18,6 @@ public class ArticlePageData
     public ArticleImageData thumbnail { get; set; }
     public string description { get; set; }
     public string descriptionsource { get; set; }
-    public Dictionary<string, string> pageprops { get; set; }
     public string extract { get; set; }
 }
 

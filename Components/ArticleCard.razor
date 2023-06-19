@@ -49,52 +49,45 @@
         if (ArticleData == null)
             ArticleData = await wikipediaDataService.GetArticleInfo(HeaderData.id);
 
-        GetFirstParagraph();
+        FirstParagraph = GetFirstParagraph();
 
     }
 
-    private void GetFirstParagraph()
+    private string GetFirstParagraph()
     {
-        if (ArticleData == null) return;
+        if (ArticleData == null) return "";
 
-        if (ArticleData.extract == null || ArticleData.extract.Length == 0) return;
-
-        HtmlDocument htmlDoc = new();
-        htmlDoc.LoadHtml(ArticleData.extract);
-
-        FirstParagraph = "";
-
-        foreach (HtmlNode node in htmlDoc.DocumentNode.SelectNodes("//p"))
+        if (ArticleData.extract == null || ArticleData.extract.Length == 0)
         {
-            if (node.InnerLength <= 2) continue;
-
-            FirstParagraph += node.InnerText;
-
-            if (FirstParagraph == "" || FirstParagraph.Length < minParagraphLength) continue;
-
-            break;
+            return ArticleData.description;
         }
 
         int safety = 0;
 
-        while (FirstParagraph.Length > maxParagraphLength & safety < 100)
+        string output = ArticleData.extract;
+
+        while (output.Length > maxParagraphLength & safety < 100)
         {
-            int lastPeriodIndex = FirstParagraph.LastIndexOf('.');
+            int lastPeriodIndex = output.LastIndexOf('.');
             if (lastPeriodIndex == -1)
                 break;
 
-            FirstParagraph = FirstParagraph.Substring(0, lastPeriodIndex);
+            output = output.Substring(0, lastPeriodIndex);
 
             safety++;
         }
 
-        if (FirstParagraph.Trim() == "")
-            FirstParagraph = ArticleData.description;
+        if (output.Trim() == "")
+            return ArticleData.description;
 
+        return output;
     }
 
     private void OpenLink()
     {
+
+        if (ArticleData.fullurl == null || ArticleData.fullurl.Length == 0) return;
+
         Uri uri = new Uri(ArticleData.fullurl);
         Browser.Default.OpenAsync(uri, BrowserLaunchMode.SystemPreferred);
     }
