@@ -57,10 +57,23 @@ public partial class WikipediaDataService
 
         string jsonString = await GetWikiJson(query);
 
-        // Deserialize the JSON string
-        var data = JsonSerializer.Deserialize<QueryResponseInfo>(jsonString);
+        if (jsonString == "")
+        {
+            return new List<ArticlePageData>();
+        }
 
-        return data.query.pages.Values.ToList();
+        try
+        {
+            // Deserialize the JSON string
+            var data = JsonSerializer.Deserialize<QueryResponseInfo>(jsonString);
+
+            return data.query.pages.Values.ToList();
+        }
+        catch (Exception ex)
+        {
+            return new List<ArticlePageData>();
+        }
+        
     }
 
     public async Task<ArticlePageData> GetArticleInfo(int articleID)
@@ -87,9 +100,21 @@ public partial class WikipediaDataService
 
         string jsonString = await GetWikiJson(query);
 
-        var data = JsonSerializer.Deserialize<QueryResponseInfo>(jsonString);
+        if (jsonString == "")
+        {
+            return new List<ArticlePageData>();
+        }
 
-        return data.query.pages.Values.Where(p => p.ns != -1).ToList();
+        try
+        {
+            var data = JsonSerializer.Deserialize<QueryResponseInfo>(jsonString);
+
+            return data.query.pages.Values.Where(p => p.ns != -1).ToList();
+        }
+        catch (Exception)
+        {
+            return new List<ArticlePageData>();
+        }        
 
     }
 
@@ -107,6 +132,30 @@ public partial class WikipediaDataService
 
         return (data.query.pages.Values.ToList(), data.@continue["grccontinue"]);
 
+    }
+
+    public async Task<List<ArticlePageData>> GetPhotosOfTheDay(DateTime startDate, DateTime endDate)
+    {
+        string query = $"action=query&format=json&prop=info|pageimages|description|extracts" +
+            $"&exsentences=5&exintro=1&explaintext=1&generator=recentchanges&inprop=url&grcnamespace=0&grclimit={count}";
+
+        string jsonString = await GetWikiJson(query);
+
+        if (jsonString == "")
+        {
+            return new List<ArticlePageData>();
+        }
+
+        try
+        {
+            var data = JsonSerializer.Deserialize<QueryResponseInfo>(jsonString);
+
+            return data.query.pages.Values.ToList();
+        }
+        catch (Exception)
+        {
+            return new List<ArticlePageData>();
+        }
     }
 
     public async Task<List<ArticlePageData>> GetCurrentEvents(DateTime date)

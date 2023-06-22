@@ -9,11 +9,11 @@
     <div>Loading...</div>
 } else
 {
-    <InfiniteScroll ObserverTargetId="observerTarget" ObservableTargetReached="(e) => GetArticles(loadMore)">
+    <InfiniteScroll ObserverTargetId="observerTarget" ObservableTargetReached="(e) => LoadMore()">
 
         @foreach (var article in articles)
         {
-            <ArticleCard ArticleData=article />
+            <ArticleCard ArticleData=article />        
         }
 
         <span id="observerTarget">
@@ -28,17 +28,35 @@
     List<ArticlePageData> articles = new();
 
     private const int loadOnStart = 20;
-    private const int loadMore = 10;    
+    private const int loadMore = 10;
+
+    private bool loading = true;
 
     protected override async Task OnInitializedAsync()
     {
         await GetArticles(loadOnStart);
     }
 
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (firstRender) return;
+
+        if (articles == null || articles.Count == 0) return;
+
+        loading = false;
+    }
+
     private async Task GetArticles(int articleCount)
     {
         var newArticles = await wikipediaDataService.GetRandomArticles(articleCount);
         articles.AddRange(newArticles);
+    }
+
+    private async Task LoadMore()
+    {
+        if (loading) return;
+
+        await GetArticles(loadMore);
     }
 
 }
