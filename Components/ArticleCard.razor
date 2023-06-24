@@ -14,7 +14,12 @@
 
             <div class="articletext col-12">
 
-                <div class="card-title text-white w-100 mb-1"><strong>@ArticleData.title</strong></div>
+                @if (LargeImage && ArticleData.images != null)
+                {
+                    <img class="card-img-top" src="@ArticleData.images[0].url" />                    
+                }
+
+                <div class="card-title text-white w-100 mb-1"><strong>@ArticleData.title</strong></div>            
 
                 @if (ArticleData.thumbnail != null)
                 {
@@ -38,18 +43,30 @@
     [Parameter]
     public ArticlePageData ArticleData { get; set; }
 
+    [Parameter]
+    public bool LargeImage { get; set; }
+
+    [Parameter]
+    public string Title { get; set; }
+
     public string FirstParagraph;
     private const int minParagraphLength = 50;
     private const int maxParagraphLength = 400;
 
     protected override async Task OnInitializedAsync()
     {
-        if (HeaderData == null & ArticleData == null) return;
+        if (HeaderData == null & ArticleData == null)
+        {
+            ArticleData = new();
+        }
 
         if (ArticleData == null)
             ArticleData = await wikipediaDataService.GetArticleInfo(HeaderData.id);
 
         FirstParagraph = GetFirstParagraph();
+
+        if (Title != null)
+            ArticleData.title = Title;
 
     }
 

@@ -2,7 +2,7 @@
 
 <CascadingValue Value="this">
  
-    <div class="page bg-black min-vh-100">    
+    <div class="page bg-black min-vh-100" @onscroll=@OnScroll>
 
         <div class="bg-dark">        
             <NavMenu PageTitle=@_pagetitle />
@@ -29,4 +29,12 @@
             InvokeAsync(() => StateHasChanged());
         }
     }
+
+    private void OnScroll()
+    {
+        var t = 0;
+
+        t++;
+    }
+
 }

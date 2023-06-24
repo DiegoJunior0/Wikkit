@@ -59,6 +59,7 @@
         <PackageReference Include="Blazor.Bootstrap" Version="1.8.3" />
         <PackageReference Include="HtmlAgilityPack" Version="1.11.46" />
         <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="7.0.0" />
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     </ItemGroup>
 
 </Project>

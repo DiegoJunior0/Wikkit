@@ -16,6 +16,7 @@ public class ArticlePageData
     public string editurl { get; set; }
     public string canonicalurl { get; set; }
     public ArticleImageData thumbnail { get; set; }
+    public List<ImageData> images { get; set; }
     public string description { get; set; }
     public string descriptionsource { get; set; }
     public string extract { get; set; }

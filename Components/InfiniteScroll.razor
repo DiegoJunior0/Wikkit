@@ -1,4 +1,5 @@
-﻿@*
+﻿@using System.Diagnostics;
+@*
     Infinite Scroll by Sven Matthys
     Copyright (c) 2020 Sven Matthys
     https://github.com/SveNord/Sve-Blazor-InfiniteScroll
@@ -27,6 +28,14 @@
             objectRef = DotNetObjectReference.Create(this);
             var initResult = await JSRuntime.InvokeAsync<dynamic>("Observer.Initialize", objectRef, ObserverTargetId);
         }
+    }
+
+    public int ScrollTop { get; set; }
+
+    private async Task OnScroll(EventArgs e)
+    {
+        ScrollTop = await JSRuntime.InvokeAsync<int>(
+           "eval", "document.scrollTop");
     }
 
     [JSInvokable]

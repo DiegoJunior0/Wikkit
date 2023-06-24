@@ -17,7 +17,7 @@
         }
 
         <span id="observerTarget">
-            <ArticleCard />
+            <ArticleCard Title="Loading..." />
         </span>
     </InfiniteScroll>
     
@@ -30,20 +30,9 @@
     private const int loadOnStart = 20;
     private const int loadMore = 10;
 
-    private bool loading = true;
-
     protected override async Task OnInitializedAsync()
     {
         await GetArticles(loadOnStart);
-    }
-
-    protected override void OnAfterRender(bool firstRender)
-    {
-        if (firstRender) return;
-
-        if (articles == null || articles.Count == 0) return;
-
-        loading = false;
     }
 
     private async Task GetArticles(int articleCount)
@@ -52,10 +41,10 @@
         articles.AddRange(newArticles);
     }
 
+
+
     private async Task LoadMore()
     {
-        if (loading) return;
-
         await GetArticles(loadMore);
     }
 

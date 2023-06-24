@@ -10,15 +10,15 @@
 }
 else
 {
-    <InfiniteScroll ObserverTargetId="observerTarget" ObservableTargetReached="(e) => GetArticles()">
+    <InfiniteScroll ObserverTargetId="observerTarget" ObservableTargetReached="(e) => LoadMore()">
 
         @foreach (var article in articles)
         {
-            <ArticleCard ArticleData=article />
+            <ArticleCard ArticleData=article LargeImage=true />
         }
 
         <span id="observerTarget">
-            <ArticleCard />
+            <ArticleCard Title="Loading..." />
         </span>
 
     </InfiniteScroll>
@@ -30,7 +30,9 @@ else
 
     private int daysOffset = 0;
 
-    private const int daysToGet = 10;
+    private const int daysToGet = 5;
+
+    private int renderCount = 0;
 
     protected override async Task OnInitializedAsync()
     {
@@ -44,16 +46,30 @@ else
 
         DateTime endDate = DateTime.Now.AddDays(-daysOffset - daysToGet);
 
-        var newArticles = await dataService.GetCurrentEvents(date);
+        var newArticles = await dataService.GetPhotosOfTheDay(dateStartDate, endDate);
 
-        ArticlePageData dateHeaderArticle = new();
-        dateHeaderArticle.title = date.ToString("yyyy MMMM dd");
+        //ArticlePageData dateHeaderArticle = new();
+        //dateHeaderArticle.title = date.ToString("yyyy MMMM dd");
 
-        articles.Add(dateHeaderArticle);
+        //articles.Add(dateHeaderArticle);
 
         articles.AddRange(newArticles);
 
-        daysOffset++;
+        daysOffset += daysToGet;
+    }
+
+    protected override Task OnAfterRenderAsync(bool firstRender)
+    {
+        renderCount++;
+
+        return base.OnAfterRenderAsync(firstRender);
+    }
+
+    private async Task LoadMore()
+    {
+        if (renderCount < 3) return;
+
+        await GetArticles();
 
     }
 }
