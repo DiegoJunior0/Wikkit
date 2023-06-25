@@ -21,6 +21,9 @@
 
     private DotNetObjectReference<InfiniteScroll> objectRef;
 
+    [CascadingParameter]
+    public MainLayout Layout { get; set; }
+
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
@@ -30,17 +33,11 @@
         }
     }
 
-    public int ScrollTop { get; set; }
-
-    private async Task OnScroll(EventArgs e)
-    {
-        ScrollTop = await JSRuntime.InvokeAsync<int>(
-           "eval", "document.scrollTop");
-    }
-
     [JSInvokable]
     public async Task OnIntersection()
     {
+        if (!Layout.HasScrolled) return;
+
         await ObservableTargetReached.InvokeAsync(true);
     }
 }

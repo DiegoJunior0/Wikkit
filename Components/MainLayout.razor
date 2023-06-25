@@ -2,14 +2,14 @@
 
 <CascadingValue Value="this">
  
-    <div class="page bg-black min-vh-100" @onscroll=@OnScroll>
+    <div class="bg-black">
 
         <div class="bg-dark">        
             <NavMenu PageTitle=@_pagetitle />
         </div>
 
-        <main>
-            <article class="content px-2">
+        <main class="overflow-auto" @onscroll=@OnScroll>
+            <article class="px-2">
                 @Body
             </article>
         </main>
@@ -19,6 +19,8 @@
 @code
 {
     private string _pagetitle;
+
+    public bool HasScrolled { get; set; }
 
     public string PageTitle
     {
@@ -32,9 +34,16 @@
 
     private void OnScroll()
     {
-        var t = 0;
-
-        t++;
+        HasScrolled = true;
     }
+
+
+    //public int ScrollTop { get; set; }
+
+    //private async Task OnScroll(EventArgs e)
+    //{
+    //    ScrollTop = await JSRuntime.InvokeAsync<int>(
+    //       "eval", "document.scrollTop");
+    //}
 
 }
