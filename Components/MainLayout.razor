@@ -2,13 +2,13 @@
 
 <CascadingValue Value="this">
  
-    <div class="bg-black">
+    <div class="bg-app" style="height: 100%; width: 100%; position: absolute; border: solid; padding: 0">
 
-        <div class="bg-dark">        
+        <div class="bg-dark" style="position: absolute; width: 100%; top: 0px; border: solid; z-index: 1000;">        
             <NavMenu PageTitle=@_pagetitle />
         </div>
 
-        <main class="overflow-auto" @onscroll=@OnScroll>
+        <main style="height: calc(100% - 2em); position: relative; overflow-y: auto; border: solid; top: 2em;" @onscroll=@OnScroll>
             <article class="px-2">
                 @Body
             </article>
@@ -36,14 +36,5 @@
     {
         HasScrolled = true;
     }
-
-
-    //public int ScrollTop { get; set; }
-
-    //private async Task OnScroll(EventArgs e)
-    //{
-    //    ScrollTop = await JSRuntime.InvokeAsync<int>(
-    //       "eval", "document.scrollTop");
-    //}
 
 }

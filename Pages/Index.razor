@@ -1,4 +1,5 @@
 ﻿@page "/"
+@inject IJSRuntime JSRuntime
 
 <PageTitleSetter PageTitle="Home" />
 
@@ -22,7 +23,7 @@
         <li><a href="/mostviewed">Most Viewed</a>Todays most viewed articles</li>
         <li><a href="/currentevents">Current Events</a></li>
         <li>Articles featuring in current world events</li>
-        <li><a href="/photooftheday">Picture of the Day</a></li>
+        <li><a href="/pictureoftheday">Picture of the Day</a></li>
         <li><a href="/recentlyChanged">Recently Changed</a></li>
         <li>Articles that have recently been edited</li>
     </ul>
@@ -37,5 +38,34 @@
     Donate to the Wikipedia Project
 
 </div>
+
+<div>
+
+    <button @onclick=@DarkMode >
+        Dark Mode!
+    </button>
+</div>
+
+@code {
+    private bool _darkMode;
+
+    private async void DarkMode()
+    {
+
+        _darkMode = !_darkMode;
+
+        if (_darkMode)
+        {
+            var module = await JSRuntime.InvokeAsync<IJSObjectReference>("import", "./js/setTheme.js");
+            await module.InvokeVoidAsync("setTheme", "dark");
+        } else
+        {
+            var module = await JSRuntime.InvokeAsync<IJSObjectReference>("import", "./js/setTheme.js");
+            await module.InvokeVoidAsync("setTheme", "");
+        }
+    } 
+
+
+}
 
 

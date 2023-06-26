@@ -2,6 +2,7 @@
 
 html, body {
     font-family: 'Roboto-Regular', Helvetica, Arial, sans-serif;
+    margin: 0px;
 }
 
 h1:focus {
@@ -67,9 +68,23 @@ a, .btn-link {
     display: none;
 }
 
-.w-30 {
-    width: 30%;
+.menu {
+    background-color: navajowhite;
 }
+
+.menucollapse:not(.show) {
+    display: none
+}
+
+.menushow {
+    height: 10em;
+}
+
+/*.collapsing {
+    height: 0;
+    overflow: hidden;
+    transition: height .35s ease
+}*/
 
 @supports (-webkit-touch-callout: none) {
     .status-bar-safe-area {

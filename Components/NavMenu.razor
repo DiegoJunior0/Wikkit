@@ -1,14 +1,15 @@
 ﻿
-<div class="top-row ps-3 navbar navbar-dark">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="">@PageTitle</a>
-        <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
-            <span class="navbar-toggler-icon"></span>
+<div class="top-row ps-3 navbar-dark menu">
+    <div class="container-fluid" style="padding: 0.1em;">        
+        <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu" style="border: none; display: inline-block;
+            width: 100%;">
+            <span class="navbar-brand" href="">@PageTitle</span>
+            @*<span class="navbar-toggler-icon oi-menu"></span>*@
         </button>
     </div>
 </div>
 
-<div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
+<div class="@NavMenuCssClass menu" @onclick="ToggleNavMenu">
     <nav class="flex-column">
         <div class="nav-item px-3">
             <NavLink class="nav-link px-2" href="" Match="NavLinkMatch.All">
@@ -31,8 +32,8 @@
             </NavLink>
         </div>
         <div class="nav-item px-3">
-            <NavLink class="nav-link px-2" href="photooftheday">
-                <span class="oi oi-image" aria-hidden="true"></span> Photo of the Day
+            <NavLink class="nav-link px-2" href="pictureoftheday">
+                <span class="oi oi-image" aria-hidden="true"></span> Picture of the Day
             </NavLink>
         </div>
         <div class="nav-item px-3">
@@ -49,7 +50,7 @@
 
     private bool collapseNavMenu = true;
 
-    private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+    private string NavMenuCssClass => collapseNavMenu ? "menucollapse" : "menushow";
 
     private void ToggleNavMenu()
     {
