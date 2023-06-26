@@ -2,6 +2,7 @@
 using Wikkit.Data;
 using BlazorBootstrap;
 using Microsoft.AspNetCore.Components.Web;
+using Wikkit.Services;
 
 namespace Wikkit;
 
@@ -19,6 +20,7 @@ public static class MauiProgram
 
 		builder.Services.AddMauiBlazorWebView();
         builder.Services.AddBlazorBootstrap();
+
 
 #if DEBUG
         builder.Services.AddBlazorWebViewDeveloperTools();

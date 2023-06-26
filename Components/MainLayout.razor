@@ -2,14 +2,12 @@
 
 <CascadingValue Value="this">
  
-    <div class="bg-app" style="height: 100%; width: 100%; position: absolute; border: solid; padding: 0">
+    <div class="app-container bg-app font-col">
+       
+        <NavMenu PageTitle=@_pagetitle />
 
-        <div class="bg-dark" style="position: absolute; width: 100%; top: 0px; border: solid; z-index: 1000;">        
-            <NavMenu PageTitle=@_pagetitle />
-        </div>
-
-        <main style="height: calc(100% - 2em); position: relative; overflow-y: auto; border: solid; top: 2em;" @onscroll=@OnScroll>
-            <article class="px-2">
+        <main @onscroll=@OnScroll>
+            <article>
                 @Body
             </article>
         </main>

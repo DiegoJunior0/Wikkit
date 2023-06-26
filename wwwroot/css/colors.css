@@ -2,8 +2,10 @@
 :root {
     --primary-color: #302AE6;
     --secondary-color: #536390;
-    --font-color: #424242;
+    --font-color: #111;
     --bg-color: #fff;
+    --bg-secondary: #bfbce0;
+    --bg-app: #ddd;
     --heading-color: #292922;
 }
 
@@ -11,11 +13,29 @@
     --primary-color: #9A97F3;
     --secondary-color: #818cab;
     --font-color: #e1e1ff;
-    --bg-color: #161625;
+    --bg-color: #1e1e26;
+    --bg-secondary: #181826;
+    --bg-app: #111;
     --heading-color: #818cab;
 }
 
 
 .bg-app {
+    background-color: var(--bg-app);
+}
+
+.bg-prim {
     background-color: var(--bg-color);
+}
+
+.bg-sec {
+    background-color: var(--bg-secondary);
+}
+
+.font-col {
+    color: var(--font-color);
+}
+
+.font-col a{
+    color: var(--font-color);
 }

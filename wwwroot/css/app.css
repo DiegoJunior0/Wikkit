@@ -1,26 +1,79 @@
 ﻿@import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
 
+:root {
+    --default-margin: 0.5rem;
+}
+
 html, body {
-    font-family: 'Roboto-Regular', Helvetica, Arial, sans-serif;
+    font-family: 'Roboto', Helvetica, Arial, sans-serif;
     margin: 0px;
+}
+
+a {
+    text-decoration: none;
 }
 
 h1:focus {
     outline: none;
 }
 
-a, .btn-link {
-    color: #0071c1;
-}
-
-.btn-primary {
-    color: #fff;
-    background-color: #1b6ec2;
-    border-color: #1861ac;
-}
-
 .content {
     padding-top: 1.1rem;
+}
+
+.app-container {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    padding: 0;
+}
+
+main {
+    margin-left: var(--default-margin);
+    margin-right: var(--default-margin);
+    height: calc(100% - 2.5rem);
+    position: relative;
+    overflow-y: auto;
+    top: 2.5rem;
+}
+
+.menu-container {
+    position: absolute;
+    width: 100%;
+    top: 0px;
+    z-index: 1000;
+}
+
+.articlecard {
+    border-radius: 5px;
+    padding: 5px;
+    margin-top: var(--default-margin);
+    max-width: 100%;
+}
+
+/*fit around contect*/
+.articlecard ::after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+.card-img-top {
+    max-width: 100%;
+    height: auto;
+}
+
+.card-thumb {
+    float: right;
+    width: 25%;
+    margin-left: var(--default-margin);
+    margin-bottom: var(--default-margin);
+    height: auto;
+}
+
+.card-title {
+    margin-bottom: var(--default-margin);
+    width: 100%;
 }
 
 .valid.modified:not([type=checkbox]) {
@@ -68,16 +121,12 @@ a, .btn-link {
     display: none;
 }
 
-.menu {
-    background-color: navajowhite;
-}
-
 .menucollapse:not(.show) {
     display: none
 }
 
 .menushow {
-    height: 10em;
+    height: 14rem;
 }
 
 /*.collapsing {
@@ -102,25 +151,3 @@ a, .btn-link {
     }
 }
 
-.wikinav {
-    position: fixed;
-    top: 0;
-    width: 100%;
-    color: white;
-    background: black;
-    height:50px;
-    z-index: 100;
-    vertical-align: central;
-    padding: 10px;
-}
-
-.scrolled-down {
-    transform: translateY(-100%);
-    transition: all 0.3s ease-in-out;
-
-}
-
-.scrolled-up {
-    transform: translateY(0);
-    transition: all 0.3s ease-in-out;
-}

@@ -1,7 +1,7 @@
 ﻿@using Wikkit.Data;
 @inject WikipediaDataService wikipediaDataService
 
-<div class="articlecard m-1 p-2 card bg-dark" @onclick=OpenLink>
+<div class="articlecard bg-prim" @onclick=OpenLink>
     @if (ArticleData == null)
     {
         <PlaceholderContainer Animation="PlaceholderAnimation.Glow">
@@ -10,28 +10,26 @@
         </PlaceholderContainer>
     } else
     {
-        <div class="articleContent row">
 
-            <div class="articletext col-12">
+        <div>
 
-                @if (LargeImage && ArticleData.images != null)
-                {
-                    <img class="card-img-top" src="@ArticleData.images[0].url" />                    
-                }
+            @if (LargeImage && ArticleData.images != null)
+            {
+                <img class="card-img-top" src="@ArticleData.images[0].url" />                    
+            }
 
-                <div class="card-title text-white w-100 mb-1"><strong>@ArticleData.title</strong></div>            
+            <div class="card-title"><strong>@ArticleData.title</strong></div>
 
-                @if (ArticleData.thumbnail != null)
-                {
-                    <img src="@ArticleData.thumbnail.source" class="card-img float-end w-25 ms-1 mb-1" />
-                }
-                @if (FirstParagraph != null && FirstParagraph.Length > 0)
-                {
-                    <p class="text-light mb-0">@FirstParagraph</p>
-                }
-            </div>         
-
-        </div>     
+            @if (ArticleData.thumbnail != null)
+            {
+                <img class="card-thumb" src="@ArticleData.thumbnail.source" />
+            }
+            @if (FirstParagraph != null && FirstParagraph.Length > 0)
+            {
+                <p style="margin: 0">@FirstParagraph</p>
+            }
+        </div>         
+  
 
     }
 </div>
