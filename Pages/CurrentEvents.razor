@@ -30,6 +30,8 @@ else
 
     int daysOffset = 0;
 
+    string cont = "";
+
     protected override async Task OnInitializedAsync()
     {
         await GetArticles();
@@ -38,18 +40,20 @@ else
     private async Task GetArticles()
     {
 
-        DateTime date = DateTime.Now.AddDays(-daysOffset);
+        DateTime date = DateTime.Now.AddDays(-daysOffset - 1);
 
-        var newArticles = await dataService.GetCurrentEvents(date);
+        if (cont == "")
+        {
+            ArticlePageData dateHeaderArticle = new();
+            dateHeaderArticle.title = date.ToString("yyyy MMMM dd");
+            articles.Add(dateHeaderArticle);
+        }
 
-        ArticlePageData dateHeaderArticle = new();
-        dateHeaderArticle.title = date.ToString("yyyy MMMM dd");
-
-        articles.Add(dateHeaderArticle);
+        (var newArticles, cont) = await dataService.GetCurrentEvents(date, cont);        
 
         articles.AddRange(newArticles);
 
-        daysOffset++;
+        if (cont == "") daysOffset++;
 
     }
 

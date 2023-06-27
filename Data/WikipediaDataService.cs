@@ -129,7 +129,7 @@ public partial class WikipediaDataService
 
         string jsonString = await GetWikiJson(query);
 
-        var data = JsonSerializer.Deserialize<QueryResponeWContinue>(jsonString);
+        var data = JsonSerializer.Deserialize<QueryResponseWContinue>(jsonString);
 
         return (data.query.pages.Values.ToList(), data.@continue["grccontinue"]);
 
@@ -183,7 +183,7 @@ public partial class WikipediaDataService
         
     }
 
-    public async Task<List<ArticlePageData>> GetCurrentEvents(DateTime date)
+    public async Task<(List<ArticlePageData>, string @continue)> GetCurrentEvents(DateTime date, string cont = "")
     {
         //action=query&format=json&prop=info%7Cdescription%7Cextracts&titles=Portal%3ACurrent_events%2F2023_June_19
         //&generator=links&inprop=url&exsentences=5&exintro=1&explaintext=1&gplnamespace=0&gpllimit=50
@@ -191,13 +191,24 @@ public partial class WikipediaDataService
         string dateString = date.ToString("yyyy_MMMM_dd");
 
         string query = $"action=query&format=json&prop=info|pageimages|description|extracts&titles=Portal:Current_events/{dateString}" +
-            $"&generator=links&inprop=url&exsentences=3&exintro=1&explaintext=1&gplnamespace=0&gpllimit=50";
+            $"&generator=links&inprop=url&exsentences=3&exintro=1&explaintext=1&gplnamespace=0&gpllimit=20";
+
+        if (cont != "") query += $"&gplcontinue={cont}";
 
         string jsonString= await GetWikiJson(query);
 
-        var data = JsonSerializer.Deserialize<QueryResponseInfo>(jsonString);
+        var data = JsonSerializer.Deserialize<QueryResponseWContinue>(jsonString);
 
-        return data.query.pages.Values.ToList();
+        if (data.query == null)
+        {
+            return (new(), "");
+        }
+
+        if (data.@continue != null) {
+            return (data.query.pages.Values.ToList(), data.@continue["gplcontinue"]);
+        }
+
+        return (data.query.pages.Values.ToList(), "");
 
     }
 
@@ -220,7 +231,7 @@ public partial class WikipediaDataService
         public QueryDataInfo query { get; set;}
     }
 
-    private class QueryResponeWContinue
+    private class QueryResponseWContinue
     {
         public QueryDataInfo query { get; set; }
         public Dictionary<string, string> @continue { get; set; }

@@ -2,7 +2,6 @@
 using Wikkit.Data;
 using BlazorBootstrap;
 using Microsoft.AspNetCore.Components.Web;
-using Wikkit.Services;
 
 namespace Wikkit;
 
