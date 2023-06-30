@@ -39,3 +39,7 @@
 .font-col a{
     color: var(--font-color);
 }
+
+.col-sec {
+    color: var(--secondary-color);
+}

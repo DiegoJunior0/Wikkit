@@ -3,47 +3,82 @@
 
 <PageTitleSetter PageTitle="Home" />
 
-<div class="bg-prim">
+<div class="bg-prim b-rad-def p-def mt-def">
 
-    <p>Welcome to <strong>Wikkit</strong>. A modern feed reader for Wikipedia</p>
+    <span>Welcome to <strong>Wikkit</strong>. A modern feed reader for Wikipedia</span>
 
 </div>
 
-<div class="bg-prim">
+<div class="bg-prim b-rad-def p-def mt-def">
 
-    <h2>Article Sections</h2>
+    <h3>Article Sections</h3>
 
-    <ul class="">
+    <ul class="list-def">
         <NavLink class="nav-link" href="random">
-            <li class=""><i class="me-3 oi oi-random"></i>
-                <strong>Random</strong><br />
+            <li>
+                <i class="oi oi-random"></i>
+                <strong> Random</strong><br />
                 A feed of randomly selected articles
-            </li>            
+            </li>
+            <hr class="solid col-sec">
         </NavLink>
-        <li><a href="/mostviewed">Most Viewed</a>Todays most viewed articles</li>
-        <li><a href="/currentevents">Current Events</a></li>
-        <li>Articles featuring in current world events</li>
-        <li><a href="/pictureoftheday">Picture of the Day</a></li>
-        <li><a href="/recentlyChanged">Recently Changed</a></li>
-        <li>Articles that have recently been edited</li>
+        <NavLink class="nav-link" href="mostviewed">
+            <li>
+                <i class="oi oi-eye"></i>
+                <strong> Most Viewed</strong><br />
+                Todays most viewed articles
+            </li>
+            <hr class="solid col-sec">
+        </NavLink>
+        <NavLink class="nav-link" href="currentevents">
+            <li>
+                <i class="oi oi-bullhorn"></i>
+                <strong> Current Events</strong><br />
+                Articles featuring in current world events
+            </li>
+            <hr class="solid col-sec">
+        </NavLink>
+        <NavLink class="nav-link" href="pictureoftheday">
+            <li>
+                <i class="oi oi-image"></i>
+                <strong> Picture of the Day</strong><br />
+                A feed of the lastest featured images
+            </li>
+            <hr class="solid col-sec">
+        </NavLink>
+        <NavLink class="nav-link" href="recentlyChanged">
+            <li>
+                <i class="oi oi-pencil"></i>
+                <strong> Recently Changed</strong><br />
+                Articles that have recently been edited
+            </li>
+        </NavLink>
     </ul>
     
 
 </div>
 
-<div class="bg-prim">
+<div class="bg-prim b-rad-def p-def mt-def">
 
-    <h2>Links</h2>
+    <h3>Links</h3>
 
-    Donate to the Wikipedia Project
+    <ul class="list-def">
+        <li><i class="oi oi-external-link"></i> <a href="https://donate.wikimedia.org/">Donate to the Wikipedia Project</a></li>
+        <li><i class="oi oi-external-link"></i> <a href="https://github.com/DiegoJunior0/Wikkit">Project on Github</a></li>
+        <li><i class="oi oi-external-link"></i> Donate to developer</li>
+    </ul>
+    
 
 </div>
 
-<div>
+<div class="bg-prim b-rad-def p-def mt-def">
 
-    <button @onclick=@SetDarkMode >
-        Dark Mode!
-    </button>
+    <h3>Settings</h3>
+
+    <ul class="list-def">
+        <li>Dark Mode <RadzenSwitch @bind-Value=@_darkMode Change=@(args => SetDarkMode(args)) style="float: right;" /> </li>
+    </ul>
+
 </div>
 
 @code {
@@ -53,15 +88,15 @@
     protected override async Task OnInitializedAsync()
     {
 
-        _darkMode = Preferences.Default.Get(darkModeKeyStr, false);
+        _darkMode = Preferences.Default.Get(darkModeKeyStr, true);
 
         await SetTheme();
 
     }
 
-    private async void SetDarkMode()
+    private async void SetDarkMode(bool value)
     {
-        _darkMode = !_darkMode;
+        _darkMode = value;
 
         Preferences.Default.Set(darkModeKeyStr, _darkMode);
 

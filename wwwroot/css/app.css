@@ -2,6 +2,7 @@
 
 :root {
     --default-margin: 0.5rem;
+    --default-border-radii: 5px;
 }
 
 html, body {
@@ -15,6 +16,32 @@ a {
 
 h1:focus {
     outline: none;
+}
+
+h3 {
+    margin: 0px;
+}
+
+.b-rad-def {
+    border-radius: var(--default-border-radii);
+}
+
+.p-def {
+    padding: var(--default-margin);
+}
+
+.mt-def {
+    margin-top: var(--default-margin);
+}
+
+.list-def {
+    list-style: none;
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+.list-def li {
+    margin: 10px 0;
 }
 
 .content {
@@ -45,13 +72,13 @@ main {
 }
 
 .articlecard {
-    border-radius: 5px;
+    border-radius: var(--default-border-radii);
     padding: 5px;
     margin-top: var(--default-margin);
     max-width: 100%;
 }
 
-/*fit around contect*/
+/*fit around content*/
 .articlecard ::after {
     content: "";
     display: table;
