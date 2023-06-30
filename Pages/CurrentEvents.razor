@@ -59,6 +59,7 @@ else
             {                
                 ArticlePageData dateHeaderArticle = new();
                 dateHeaderArticle.title = date.ToString("yyyy MMMM dd");
+                dateHeaderArticle.fullurl = $"https://en.wikipedia.org/wiki/Portal:Current_events/{date.ToString("yyyy_MMMM_dd")}";
                 newArticles.Add(dateHeaderArticle);
             }
 
