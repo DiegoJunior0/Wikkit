@@ -20,5 +20,6 @@ public class ArticlePageData
     public string description { get; set; }
     public string descriptionsource { get; set; }
     public string extract { get; set; }
+    public bool viewed { get; set; }
 }
 

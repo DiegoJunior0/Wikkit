@@ -1,0 +1,27 @@
+:root {
+    --font-size: 1rem;     
+}
+
+[data-font-size="small"] {
+    --font-size: 0.9rem;
+}
+
+[data-font-size="medium"] {
+    --font-size: 1rem;
+}
+
+[data-font-size="large"] {
+    --font-size: 1.1rem;
+}
+
+[data-font-size="extralarge"] {
+    --font-size: 1.2rem;
+}
+
+html, body {
+    font-size: var(--font-size);
+}
+
+.r-dropdown {
+    font-size: var(--font-size) !important;
+}

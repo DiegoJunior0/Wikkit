@@ -6,7 +6,7 @@
 
 @if (articles == null || articles.Count == 0)
 {
-    <div>Loading...</div>
+    <div class="p-def">Loading...</div>
 } else
 {
     <InfiniteScroll ObserverTargetId="observerTarget" ObservableTargetReached="(e) => LoadMore()">
@@ -26,12 +26,9 @@
 @code {
     List<ArticlePageData> articles = new();
 
-    IEnumerable<ArticlePageData> articlePart;
-
     private const int loadOnStart = 20;
     private const int loadMore = 10;
 
-    private int count;
     private bool isLoading = false;
 
     protected override async Task OnInitializedAsync()

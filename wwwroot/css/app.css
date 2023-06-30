@@ -41,7 +41,7 @@ h3 {
 }
 
 .list-def li {
-    margin: 10px 0;
+    margin: 0.8rem 0;
 }
 
 .content {
@@ -73,7 +73,7 @@ main {
 
 .articlecard {
     border-radius: var(--default-border-radii);
-    padding: 5px;
+    padding: var(--default-margin);
     margin-top: var(--default-margin);
     max-width: 100%;
 }

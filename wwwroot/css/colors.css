@@ -4,8 +4,9 @@
     --secondary-color: #536390;
     --font-color: #111;
     --bg-color: #fff;
+    --bg-color-dark: #dde;
     --bg-secondary: #bfbce0;
-    --bg-app: #ddd;
+    --bg-app: #ccc;
     --heading-color: #292922;
 }
 
@@ -13,7 +14,8 @@
     --primary-color: #9A97F3;
     --secondary-color: #818cab;
     --font-color: #e1e1ff;
-    --bg-color: #1e1e26;
+    --bg-color: #2e2e3b;
+    --bg-color-dark: #1c1c25;
     --bg-secondary: #181826;
     --bg-app: #111;
     --heading-color: #818cab;
@@ -26,6 +28,10 @@
 
 .bg-prim {
     background-color: var(--bg-color);
+}
+
+.bg-prim-sel {
+    background-color: Var(--bg-color-dark);
 }
 
 .bg-sec {
@@ -42,4 +48,12 @@
 
 .col-sec {
     color: var(--secondary-color);
+}
+
+.r-dropdown {
+    color: var(--font-color) !important;
+    background-color: var(--bg-color) !important;
+    padding: 0.2rem !important;
+    height: 2rem !important;
+    margin: 0;
 }

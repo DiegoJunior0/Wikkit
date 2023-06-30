@@ -1,7 +1,7 @@
 ﻿@using Wikkit.Data;
 @inject WikipediaDataService wikipediaDataService
 
-<div class="articlecard bg-prim" @onclick=OpenLink>
+<div class="articlecard @(ArticleData.viewed ? "bg-prim-sel" : "bg-prim")" @onclick=OpenLink>
     @if (ArticleData == null)
     {
         <PlaceholderContainer Animation="PlaceholderAnimation.Glow">
@@ -35,8 +35,6 @@
 </div>
 
 @code {
-    [Parameter]
-    public ArticleHeaderData HeaderData { get; set; }
 
     [Parameter]
     public ArticlePageData ArticleData { get; set; }
@@ -51,15 +49,12 @@
     private const int minParagraphLength = 50;
     private const int maxParagraphLength = 400;
 
-    protected override async Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
-        if (HeaderData == null & ArticleData == null)
+        if (ArticleData == null)
         {
             ArticleData = new();
         }
-
-        if (ArticleData == null)
-            ArticleData = await wikipediaDataService.GetArticleInfo(HeaderData.id);
 
         FirstParagraph = GetFirstParagraph();
 
@@ -105,6 +100,8 @@
 
         Uri uri = new Uri(ArticleData.fullurl);
         Browser.Default.OpenAsync(uri, BrowserLaunchMode.SystemPreferred);
+
+        ArticleData.viewed = true;
     }
 
 }

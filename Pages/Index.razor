@@ -76,21 +76,33 @@
     <h3>Settings</h3>
 
     <ul class="list-def">
-        <li>Dark Mode <RadzenSwitch @bind-Value=@_darkMode Change=@(args => SetDarkMode(args)) style="float: right;" /> </li>
+        <li style="margin: 1.2rem 0;">Dark Mode <RadzenSwitch @bind-Value=@_darkMode 
+            Change=@(args => SetDarkMode(args)) style="float: right;" /> </li>
+        <li style="margin: 1.2rem 0;">
+            Font Size <RadzenDropDown TValue="string" @bind-Value=@_fontsize class="r-dropdown"
+            Data=@fontSizes Change=@(args => SetFontSize($"{args}")) style="float: right; width: 40%;" /></li>
     </ul>
-
 </div>
 
 @code {
     private bool _darkMode;
+    private string _fontsize;
+
     private const string darkModeKeyStr = "DarkMode";
+    private const string fontSizeKeyStr = "FontSize";
+
+    private List<string> fontSizes = new() {"small", "medium", "large", "extralarge"} ;
 
     protected override async Task OnInitializedAsync()
     {
 
         _darkMode = Preferences.Default.Get(darkModeKeyStr, true);
 
-        await SetTheme();
+        _fontsize = Preferences.Default.Get(fontSizeKeyStr, "medium");
+
+        await UpdateTheme();
+
+        await UpdateFontSize();
 
     }
 
@@ -100,10 +112,19 @@
 
         Preferences.Default.Set(darkModeKeyStr, _darkMode);
 
-        await SetTheme();
-    } 
+        await UpdateTheme();
+    }
 
-    private async Task SetTheme()
+    private async void SetFontSize(string value)
+    {
+        _fontsize = value;
+
+        Preferences.Default.Set(fontSizeKeyStr, _fontsize);
+
+        await UpdateFontSize();
+    }
+
+    private async Task UpdateTheme()
     {
         if (_darkMode)
         {
@@ -115,6 +136,14 @@
             var module = await JSRuntime.InvokeAsync<IJSObjectReference>("import", "./js/setTheme.js");
             await module.InvokeVoidAsync("setTheme", "");
         }
+    }
+
+    private async Task UpdateFontSize()
+    {
+        
+        var module = await JSRuntime.InvokeAsync<IJSObjectReference>("import", "./js/setTheme.js");
+        await module.InvokeVoidAsync("setFontSize", _fontsize);
+
     }
 
 }
