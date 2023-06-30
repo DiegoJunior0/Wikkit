@@ -20,15 +20,19 @@
             <ArticleCard Title="Loading..." />
         </span>
     </InfiniteScroll>
-    
 }
 
 
 @code {
     List<ArticlePageData> articles = new();
 
+    IEnumerable<ArticlePageData> articlePart;
+
     private const int loadOnStart = 20;
     private const int loadMore = 10;
+
+    private int count;
+    private bool isLoading = false;
 
     protected override async Task OnInitializedAsync()
     {
@@ -37,12 +41,18 @@
 
     private async Task GetArticles(int articleCount)
     {
+        isLoading = true;
+
         var newArticles = await wikipediaDataService.GetRandomArticles(articleCount);
         articles.AddRange(newArticles);
+
+        isLoading = false;
     }
 
     private async Task LoadMore()
     {
+        if (isLoading) return;
+
         await GetArticles(loadMore);
     }
 

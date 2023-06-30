@@ -32,28 +32,54 @@ else
 
     string cont = "";
 
+    private bool isLoading = false;
+
     protected override async Task OnInitializedAsync()
     {
+        daysOffset = 0;
+        cont = "";
+
         await GetArticles();
     }
 
     private async Task GetArticles()
     {
 
-        DateTime date = DateTime.Now.AddDays(-daysOffset - 1);
+        if (isLoading) return;
+        isLoading = true;
 
-        if (cont == "")
-        {
-            ArticlePageData dateHeaderArticle = new();
-            dateHeaderArticle.title = date.ToString("yyyy MMMM dd");
-            articles.Add(dateHeaderArticle);
-        }
+        DateTime date = DateTime.Now.AddDays(-daysOffset);
 
-        (var newArticles, cont) = await dataService.GetCurrentEvents(date, cont);        
+        List<ArticlePageData> newArticles = new();
+        int safety = 0;
 
+        while (newArticles.Count < 10 && safety < 50)
+        {            
+            if (cont == "")            
+            {                
+                ArticlePageData dateHeaderArticle = new();
+                dateHeaderArticle.title = date.ToString("yyyy MMMM dd");
+                newArticles.Add(dateHeaderArticle);
+            }
+
+            (List<ArticlePageData> gotArticles, cont) = await dataService.GetCurrentEvents(date, cont);
+
+            newArticles.AddRange(gotArticles);
+
+            if (cont == "")
+            {
+                date = date.AddDays(-1);
+                daysOffset++;
+            }            
+
+            safety++;
+        }  
+        
         articles.AddRange(newArticles);
 
         if (cont == "") daysOffset++;
+
+        isLoading = false;
 
     }
 

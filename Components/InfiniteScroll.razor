@@ -39,5 +39,7 @@
         if (!Layout.HasScrolled) return;
 
         await ObservableTargetReached.InvokeAsync(true);
+
+        Layout.HasScrolled = false;
     }
 }
