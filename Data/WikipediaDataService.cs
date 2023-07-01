@@ -163,7 +163,9 @@ public partial class WikipediaDataService
 
                 ArticlePageData page = data.query.pages.Values.ToList()[0];
 
-                page.images[0].url = await GetImageUrl(page.images[0].title);
+                int screenWidth = (int)DeviceDisplay.Current.MainDisplayInfo.Width;
+
+                page.images[0].url = await GetImageUrl(page.images[0].title, screenWidth);
 
                 page.title = $"Picture of the Day - {curDate: yyyy-MM-dd}";
 
@@ -188,7 +190,7 @@ public partial class WikipediaDataService
         //action=query&format=json&prop=info%7Cdescription%7Cextracts&titles=Portal%3ACurrent_events%2F2023_June_19
         //&generator=links&inprop=url&exsentences=5&exintro=1&explaintext=1&gplnamespace=0&gpllimit=50
 
-        string dateString = date.ToString("yyyy_MMMM_dd");
+        string dateString = date.ToString("yyyy_MMMM_d");
 
         string query = $"action=query&format=json&prop=info|pageimages|description|extracts&titles=Portal:Current_events/{dateString}" +
             $"&generator=links&inprop=url&exsentences=3&exintro=1&explaintext=1&gplnamespace=0&gpllimit=20";
@@ -212,16 +214,16 @@ public partial class WikipediaDataService
 
     }
 
-    public async Task<string> GetImageUrl(string title)
+    public async Task<string> GetImageUrl(string title, int size)
     {
-        string query = $"action=query&format=json&prop=imageinfo&iiprop=url&titles={title}";
+        string query = $"action=query&format=json&prop=imageinfo&iiprop=url&iiurlwidth={size}&titles={title}";
 
         string jsonString = await GetWikiJson(query);
 
         JsonDocument data = JsonDocument.Parse(jsonString);
 
         string imageurl = data.RootElement.GetProperty("query")
-            .GetProperty("pages").EnumerateObject().First().Value.GetProperty("imageinfo")[0].GetProperty("url").GetString();
+            .GetProperty("pages").EnumerateObject().First().Value.GetProperty("imageinfo")[0].GetProperty("thumburl").GetString();
 
         return imageurl;
     }

@@ -32,8 +32,6 @@ else
 
     private const int daysToGet = 5;
 
-    private int renderCount = 0;
-
     protected override async Task OnInitializedAsync()
     {
         await GetArticles();
@@ -60,16 +58,11 @@ else
 
     protected override Task OnAfterRenderAsync(bool firstRender)
     {
-        renderCount++;
-
         return base.OnAfterRenderAsync(firstRender);
     }
 
     private async Task LoadMore()
     {
-        if (renderCount < 3) return;
-
         await GetArticles();
-
     }
 }
