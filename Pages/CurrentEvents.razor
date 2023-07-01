@@ -58,8 +58,8 @@ else
             if (cont == "")            
             {                
                 ArticlePageData dateHeaderArticle = new();
-                dateHeaderArticle.title = date.ToString("yyyy MMMM dd");
-                dateHeaderArticle.fullurl = $"https://en.wikipedia.org/wiki/Portal:Current_events/{date.ToString("yyyy_MMMM_dd")}";
+                dateHeaderArticle.title = date.ToString("yyyy MMMM d");
+                dateHeaderArticle.fullurl = $"https://en.wikipedia.org/wiki/Portal:Current_events/{date.ToString("yyyy_MMMM_d")}";
                 newArticles.Add(dateHeaderArticle);
             }
 
