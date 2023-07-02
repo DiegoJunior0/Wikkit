@@ -53,7 +53,7 @@ public partial class WikipediaDataService
     public async Task<List<ArticlePageData>> GetRandomArticles(int articleCount)
     {
 
-        string query = $"action=query&format=json&prop=info|pageimages|description|extracts" +
+        string query = $"action=query&format=json&prop=info|pageimages|description|extracts&pithumbsize=100" +
         $"&generator=random&inprop=url&exsentences=3&exintro=1&explaintext=1&grnnamespace=0&grnlimit={articleCount}";
 
         string jsonString = await GetWikiJson(query);
@@ -81,7 +81,7 @@ public partial class WikipediaDataService
     {
 
         string query = $"action=query&format=json&pageids={articleID}" +
-            $"&prop=info|pageimages|description|extracts&inprop=url";
+            $"&prop=info|pageimages|description|extracts&inprop=url&pithumbsize=100";
 
         string jsonString = await GetWikiJson(query);
 
@@ -96,7 +96,7 @@ public partial class WikipediaDataService
     public async Task<List<ArticlePageData>> GetMostViewed(int count, int offset)
     {
 
-        string query = $"action=query&format=json&prop=info|pageimages|description|extracts" +
+        string query = $"action=query&format=json&prop=info|pageimages|description|extracts&pithumbsize=100" +
         $"&exsentences=3&exintro=1&explaintext=1&generator=mostviewed&inprop=url&gpvimlimit={count}&gpvimoffset={offset}";
 
         string jsonString = await GetWikiJson(query);
@@ -121,7 +121,7 @@ public partial class WikipediaDataService
 
     public async Task<(List<ArticlePageData>, string @continue)> GetRecentlyChanged(int count, string cont = "")
     {
-        string query = $"action=query&format=json&prop=info|pageimages|description|extracts" +
+        string query = $"action=query&format=json&prop=info|pageimages|description|extracts&pithumbsize=100" +
             $"&exsentences=3&exintro=1&explaintext=1&generator=recentchanges&inprop=url&grcnamespace=0&grclimit={count}";
 
         if (cont != "")
@@ -129,9 +129,21 @@ public partial class WikipediaDataService
 
         string jsonString = await GetWikiJson(query);
 
-        var data = JsonSerializer.Deserialize<QueryResponseWContinue>(jsonString);
+        if (jsonString == "")
+        {
+            return (new List<ArticlePageData> { new ArticlePageData { title = "No results returned" } }, "");
+        }
 
-        return (data.query.pages.Values.ToList(), data.@continue["grccontinue"]);
+        try
+        {
+            var data = JsonSerializer.Deserialize<QueryResponseWContinue>(jsonString);
+
+            return (data.query.pages.Values.ToList(), data.@continue["grccontinue"]);
+        }
+        catch (Exception ex)
+        {
+            return (new List<ArticlePageData> { new ArticlePageData { title = ex.Message } }, "");
+        }        
 
     }
 
@@ -193,24 +205,37 @@ public partial class WikipediaDataService
         string dateString = date.ToString("yyyy_MMMM_d");
 
         string query = $"action=query&format=json&prop=info|pageimages|description|extracts&titles=Portal:Current_events/{dateString}" +
-            $"&generator=links&inprop=url&exsentences=3&exintro=1&explaintext=1&gplnamespace=0&gpllimit=20";
+            $"&generator=links&inprop=url&exsentences=3&exintro=1&explaintext=1&gplnamespace=0&gpllimit=20&pithumbsize=100";
 
         if (cont != "") query += $"&gplcontinue={cont}";
 
         string jsonString= await GetWikiJson(query);
 
-        var data = JsonSerializer.Deserialize<QueryResponseWContinue>(jsonString);
-
-        if (data.query == null)
+        if (jsonString == "")
         {
-            return (new(), "");
+            return (new List<ArticlePageData> { new ArticlePageData { title = "No results returned" } },"");
         }
 
-        if (data.@continue != null) {
-            return (data.query.pages.Values.ToList(), data.@continue["gplcontinue"]);
-        }
+        try
+        {
+            var data = JsonSerializer.Deserialize<QueryResponseWContinue>(jsonString);
 
-        return (data.query.pages.Values.ToList(), "");
+            if (data.query == null)
+            {
+                return (new(), "");
+            }
+
+            if (data.@continue != null)
+            {
+                return (data.query.pages.Values.ToList(), data.@continue["gplcontinue"]);
+            }
+
+            return (data.query.pages.Values.ToList(), "");
+
+        } catch (Exception ex)
+        {
+            return (new List<ArticlePageData> { new ArticlePageData { title = ex.Message } }, "");
+        }        
 
     }
 
@@ -220,12 +245,25 @@ public partial class WikipediaDataService
 
         string jsonString = await GetWikiJson(query);
 
-        JsonDocument data = JsonDocument.Parse(jsonString);
+        if (jsonString == "")
+        {
+            return "";
+        }
 
-        string imageurl = data.RootElement.GetProperty("query")
-            .GetProperty("pages").EnumerateObject().First().Value.GetProperty("imageinfo")[0].GetProperty("thumburl").GetString();
+        try
+        {
+            JsonDocument data = JsonDocument.Parse(jsonString);
 
-        return imageurl;
+            string imageurl = data.RootElement.GetProperty("query")
+                .GetProperty("pages").EnumerateObject().First().Value.GetProperty("imageinfo")[0].GetProperty("thumburl").GetString();
+
+            return imageurl;
+        }
+        catch (Exception ex)
+        {
+            return ex.Message;           
+        }
+        
     }
 
     private class QueryResponseInfo

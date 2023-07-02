@@ -88,11 +88,12 @@ main {
 .card-img-top {
     max-width: 100%;
     height: auto;
+    border-radius: var(--default-border-radii);
 }
 
 .card-thumb {
     float: right;
-    width: 25%;
+    /*width: 25%;*/
     margin-left: var(--default-margin);
     margin-bottom: var(--default-margin);
     height: auto;
