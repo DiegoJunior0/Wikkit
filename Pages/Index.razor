@@ -5,7 +5,7 @@
 
 <div class="bg-prim b-rad-def p-def mt-def">
 
-    <span>Welcome to <strong>Wikkit</strong>. A modern feed reader for Wikipedia</span>
+    <span>Welcome to <strong>Wikkit</strong>. A scrolling feed reader for Wikipedia</span>
 
 </div>
 
@@ -59,6 +59,22 @@
 
 <div class="bg-prim b-rad-def p-def mt-def">
 
+    <h3>Settings</h3>
+
+    <ul class="list-def">
+        <li style="margin: 1.2rem 0;">
+            Dark Mode <RadzenSwitch @bind-Value=@_darkMode
+                                    Change=@(args => SetDarkMode(args)) style="float: right;" />
+        </li>
+        <li style="margin: 1.2rem 0;">
+            Font Size <RadzenDropDown TValue="string" @bind-Value=@_fontsize class="r-dropdown"
+                                      Data=@fontSizes Change=@(args => SetFontSize($"{args}")) style="float: right; width: 40%;" />
+        </li>
+    </ul>
+</div>
+
+<div class="bg-prim b-rad-def p-def mt-def">
+
     <h3>Links</h3>
 
     <ul class="list-def">
@@ -71,15 +87,15 @@
 
 <div class="bg-prim b-rad-def p-def mt-def">
 
-    <h3>Settings</h3>
+    <h3>About</h3>
 
     <ul class="list-def">
-        <li style="margin: 1.2rem 0;">Dark Mode <RadzenSwitch @bind-Value=@_darkMode 
-            Change=@(args => SetDarkMode(args)) style="float: right;" /> </li>
-        <li style="margin: 1.2rem 0;">
-            Font Size <RadzenDropDown TValue="string" @bind-Value=@_fontsize class="r-dropdown"
-            Data=@fontSizes Change=@(args => SetFontSize($"{args}")) style="float: right; width: 40%;" /></li>
+        <li>Contact/support: wikkitapp@gmail.com</li>
+        <li>Credits: Icon, Wikipedia</li>
+        <li>Licence:</li>
+        <li>Copyright: © Henry Skinner @DateTime.Now.ToString("yyyy")</li>
     </ul>
+
 </div>
 
 @code {
