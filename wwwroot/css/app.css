@@ -3,6 +3,7 @@
 :root {
     --default-margin: 0.5rem;
     --default-border-radii: 5px;
+    --nav-top-height: 3rem;
 }
 
 html, body {
@@ -58,10 +59,14 @@ h3 {
 main {
     margin-left: var(--default-margin);
     margin-right: var(--default-margin);
-    height: calc(100% - 2.5rem);
+    height: calc(100% - var(--nav-top-height));
     position: relative;
     overflow-y: auto;
-    top: 2.5rem;
+    top: var(--nav-top-height);
+}
+
+.menu-bar {
+    height: var(--nav-top-height);
 }
 
 .menu-container {
@@ -69,6 +74,26 @@ main {
     width: 100%;
     top: 0px;
     z-index: 1000;
+}
+
+.menucollapse:not(.show) {
+    display: none
+}
+
+.menucollapse {
+    
+}
+
+.menushow {
+    height: calc(var(--nav-top-height) + 12rem);
+}
+
+.menu-item {
+    padding: 0.5rem;
+}
+
+.menu-item .oi {
+    margin-right: 0.5rem;
 }
 
 .articlecard {
@@ -148,14 +173,6 @@ main {
 
 .status-bar-safe-area {
     display: none;
-}
-
-.menucollapse:not(.show) {
-    display: none
-}
-
-.menushow {
-    height: 14rem;
 }
 
 /*.collapsing {

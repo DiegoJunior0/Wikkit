@@ -1,9 +1,10 @@
 ﻿
 <div class="menu-container bg-sec">
-    <div class="menu">
+    <div class="menu-bar">
         <div class="container-fluid" style="padding: 0.7rem;">        
             <div class="navbar-toggler" @onclick="ToggleNavMenu" style="border: none; display: inline-block;
                 width: calc(100% - 1.5rem);">
+                <span class="oi @(NavMenuIconClass)" style="margin-right: 0.5rem;"></span>
                 <span class="navbar-brand" href=""><strong>@PageTitle</strong></span>
                 @*<span class="navbar-toggler-icon oi-menu"></span>*@
             </div>
@@ -11,35 +12,35 @@
         </div>
     </div>
 
-    <div class="@NavMenuCssClass menu" style="padding: 0.5rem;" @onclick="ToggleNavMenu">
+    <div class="@NavMenuCssClass" style="padding: 0.5rem;" @onclick="ToggleNavMenu">
         <nav class="flex-column">
-            <div class="nav-item" style="padding: 0.5rem;">
-                <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
+            <div class="menu-item">
+                <NavLink href="" Match="NavLinkMatch.All">
                     <span class="oi oi-home" aria-hidden="true"></span> Home
                 </NavLink>
             </div>
-            <div class="nav-item" style="padding: 0.5rem;">
-                <NavLink class="nav-link" href="random">
+            <div class="menu-item">
+                <NavLink href="random">
                     <span class="oi oi-random" aria-hidden="true"></span> Random
                 </NavLink>
             </div>
-            <div class="nav-item" style="padding: 0.5rem;">
-                <NavLink class="nav-link" href="mostviewed">
+            <div class="menu-item">
+                <NavLink href="mostviewed">
                     <span class="oi oi-eye" aria-hidden="true"></span> Most Viewed
                 </NavLink>
             </div>
-            <div class="nav-item" style="padding: 0.5rem;">
-                <NavLink class="nav-link" href="currentevents">
+            <div class="menu-item">
+                <NavLink href="currentevents">
                     <span class="oi oi-bullhorn" aria-hidden="true"></span> Current Events
                 </NavLink>
             </div>
-            <div class="nav-item" style="padding: 0.5rem;">
-                <NavLink class="nav-link" href="pictureoftheday">
+            <div class="menu-item">
+                <NavLink href="pictureoftheday">
                     <span class="oi oi-image" aria-hidden="true"></span> Picture of the Day
                 </NavLink>
             </div>
-            <div class="nav-item" style="padding: 0.5rem;">
-                <NavLink class="nav-link" href="recentlyChanged">
+            <div class="menu-item">
+                <NavLink href="recentlyChanged">
                     <span class="oi oi-pencil" aria-hidden="true"></span> Recently Changed
                 </NavLink>
             </div>
@@ -54,6 +55,8 @@
     private bool collapseNavMenu = true;
 
     private string NavMenuCssClass => collapseNavMenu ? "menucollapse" : "menushow";
+
+    private string NavMenuIconClass => collapseNavMenu ? "oi-menu" : "oi-caret-bottom";
 
     private void ToggleNavMenu()
     {
