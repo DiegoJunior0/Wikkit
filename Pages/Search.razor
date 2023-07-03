@@ -1,0 +1,102 @@
+﻿@page "/search"
+@using Wikkit.Data;
+@inject WikipediaDataService dataService;
+
+<PageTitleSetter PageTitle="Search" />
+
+<div class="search-bar p-def bg-prim b-rad-def" style="">
+    <EditForm Model="@searchModel" OnValidSubmit="@SearchSubmit">
+        <InputText class="bg-sec font-col b-rad-def" @bind-Value="@searchModel.SearchText" placeholder="Search..."
+                   style="" />
+    </EditForm>    
+</div>
+
+@if (searchSubmitted)
+{
+    <div class="p-def">Loading...</div>
+}
+
+@if (articles != null && articles.Count > 0)
+{
+    <InfiniteScroll ObserverTargetId="observerTarget" ObservableTargetReached="(e) => ContinueArticles(searchModel.SearchText, currentOffset)">
+
+        @foreach (var article in articles)
+        {
+            <ArticleCard ArticleData=article />
+        }
+
+        @if (currentOffset > 0)
+        {
+            <span id="observerTarget">
+                <ArticleCard Title="Loading..." />
+            </span>
+        }
+        
+
+    </InfiniteScroll>
+
+}
+
+@code {
+    List<ArticlePageData> articles = new();
+
+    private SearchModel searchModel = new();
+
+    private bool searchSubmitted = false;
+
+    private int currentOffset;
+
+    private class SearchModel
+    {
+        public string SearchText;
+    }
+
+    private async void SearchSubmit()
+    {
+
+        if (searchModel.SearchText == "") return;
+
+        searchSubmitted = true;
+
+        StateHasChanged();
+
+        await GetArticles(searchModel.SearchText);
+
+    }
+
+    private async Task GetArticles(string searchtext)
+    {
+
+        currentOffset = 0;
+
+        articles.Clear();
+
+        (articles, currentOffset) = await dataService.GetSearch(searchtext);
+
+        searchSubmitted = false;
+
+        StateHasChanged();
+    }
+
+    private async Task ContinueArticles(string searchtext, int offset)
+    {
+        if (offset == 0) return;
+
+        List<ArticlePageData> newArticles = new();
+        int newoffset = 0;
+
+        (newArticles, newoffset) = await dataService.GetSearch(searchtext, offset);
+
+        articles.AddRange(newArticles);
+
+        if (newArticles.Count < 10 || currentOffset == newoffset)
+        {
+            currentOffset = 0;
+        } else
+        {
+            currentOffset = newoffset;
+        }
+
+    }
+
+}

@@ -138,7 +138,7 @@ public partial class WikipediaDataService
         {
             var data = JsonSerializer.Deserialize<QueryResponseWContinue>(jsonString);
 
-            return (data.query.pages.Values.ToList(), data.@continue["grccontinue"]);
+            return (data.query.pages.Values.ToList(), data.@continue["grccontinue"].ToString());
         }
         catch (Exception ex)
         {
@@ -227,7 +227,7 @@ public partial class WikipediaDataService
 
             if (data.@continue != null)
             {
-                return (data.query.pages.Values.ToList(), data.@continue["gplcontinue"]);
+                return (data.query.pages.Values.ToList(), data.@continue["gplcontinue"].ToString());
             }
 
             return (data.query.pages.Values.ToList(), "");
@@ -237,6 +237,40 @@ public partial class WikipediaDataService
             return (new List<ArticlePageData> { new ArticlePageData { title = ex.Message } }, "");
         }        
 
+    }
+
+    public async Task<(List<ArticlePageData>, int offset)> GetSearch(string searchtext, int offset=0)
+    {
+        string query = $"action=query&format=json&prop=info|pageimages|description|extracts&pithumbsize=100" +
+            $"&exsentences=3&exintro=1&explaintext=1&generator=search&inprop=url" +
+            $"&gsrnamespace=0&gsrsearch={searchtext}&gsrlimit=10&gsroffset={offset}&gsrsort=relevance";
+
+        string jsonString = await GetWikiJson(query);
+
+        if (jsonString == "")
+        {
+            return (new List<ArticlePageData> { new ArticlePageData { title = "No results returned" } }, 0);
+        }
+
+        try
+        {
+            var data = JsonSerializer.Deserialize<QueryResponseWContinue>(jsonString);
+
+            if (data.query == null)
+            {
+                return (new() { new ArticlePageData { title = "No results"} }, 0);
+            }
+
+            List<ArticlePageData> results = data.query.pages.Values.ToList();
+
+            results = results.OrderBy(a => a.index).ToList();
+
+            return (results, Convert.ToInt32(data.@continue["gsroffset"].ToString())); //TODO: Nasty! learn more about the stupid system.text.json
+        }
+        catch (Exception ex)
+        {
+            return (new () { new ArticlePageData { title = ex.Message } }, 0);
+        }
     }
 
     public async Task<string> GetImageUrl(string title, int size)
@@ -274,7 +308,7 @@ public partial class WikipediaDataService
     private class QueryResponseWContinue
     {
         public QueryDataInfo query { get; set; }
-        public Dictionary<string, string> @continue { get; set; }
+        public Dictionary<string, object> @continue { get; set; }
     }
 
     private class QueryDataInfo

@@ -89,7 +89,7 @@ main {
 }
 
 .menushow {
-    height: calc(var(--nav-top-height) + 12rem);
+    height: calc(var(--nav-top-height) + 13rem);
 }
 
 .menu-item {
@@ -132,6 +132,21 @@ main {
 .card-title {
     margin-bottom: var(--default-margin);
     width: 100%;
+}
+
+.search-bar {
+    position: sticky;
+    top: 0;
+    z-index: 500;
+    width: calc(100% - (2 * var(--default-margin)));
+}
+
+.search-bar input {
+    width: calc(100% - 0.5rem);
+    height: 1.7rem;
+    border: solid;
+    font-size: 1rem;
+    font-family: 'Roboto', Helvetica, Arial, sans-serif !important;
 }
 
 .valid.modified:not([type=checkbox]) {

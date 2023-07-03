@@ -5,6 +5,7 @@ public class ArticlePageData
     public int pageid { get; set; }
     public int ns { get; set; }
     public string title { get; set; }
+    public int index { get; set; }
     public string contentmodel { get; set; }
     public string pagelanguage { get; set; }
     public string pagelanguagehtmlcode { get; set; }
