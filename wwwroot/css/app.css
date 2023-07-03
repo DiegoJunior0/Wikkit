@@ -45,6 +45,10 @@ h3 {
     margin: 0.8rem 0;
 }
 
+.list-def .oi {
+    margin-right: var(--default-margin);
+}
+
 .content {
     padding-top: 1.1rem;
 }
