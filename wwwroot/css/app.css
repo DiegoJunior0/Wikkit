@@ -35,6 +35,14 @@ h3 {
     margin-top: var(--default-margin);
 }
 
+.ml-def {
+    margin-left: var(--default-margin);
+}
+
+.mr-def {
+    margin-right: var(--default-margin);
+}
+
 .list-def {
     list-style: none;
     padding-left: 1rem;
@@ -61,8 +69,8 @@ h3 {
 }
 
 main {
-    margin-left: var(--default-margin);
-    margin-right: var(--default-margin);
+/*    margin-left: var(--default-margin);
+    margin-right: var(--default-margin);*/
     height: calc(100% - var(--nav-top-height));
     position: relative;
     overflow-y: auto;
@@ -104,6 +112,8 @@ main {
     border-radius: var(--default-border-radii);
     padding: var(--default-margin);
     margin-top: var(--default-margin);
+    margin-left: var(--default-margin);
+    margin-right: var(--default-margin);
     max-width: 100%;
 }
 
@@ -137,12 +147,14 @@ main {
 .search-bar {
     position: sticky;
     top: 0;
+    margin-top: 0;
+    left: -0.5rem;
     z-index: 500;
-    width: calc(100% - (2 * var(--default-margin)));
+    width: 100%;
 }
 
 .search-bar input {
-    width: calc(100% - 0.5rem);
+    width: calc(100% - (3 * var(--default-margin)));
     height: 1.7rem;
     border: solid;
     font-size: 1rem;

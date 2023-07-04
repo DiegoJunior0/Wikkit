@@ -4,10 +4,9 @@
 
 <PageTitleSetter PageTitle="Search" />
 
-<div class="search-bar p-def bg-prim b-rad-def" style="">
+<div class="search-bar p-def bg-sec">
     <EditForm Model="@searchModel" OnValidSubmit="@SearchSubmit">
-        <InputText class="bg-sec font-col b-rad-def" @bind-Value="@searchModel.SearchText" placeholder="Search..."
-                   style="" />
+        <InputText class="bg-sec font-col b-rad-def" @bind-Value="@searchModel.SearchText" placeholder="Search..." />
     </EditForm>    
 </div>
 
