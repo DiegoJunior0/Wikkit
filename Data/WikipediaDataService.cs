@@ -122,7 +122,7 @@ public partial class WikipediaDataService
     public async Task<(List<ArticlePageData>, string @continue)> GetRecentlyChanged(int count, string cont = "")
     {
         string query = $"action=query&format=json&prop=info|pageimages|description|extracts&pithumbsize=100" +
-            $"&exsentences=3&exintro=1&explaintext=1&generator=recentchanges&inprop=url&grcnamespace=0&grclimit={count}";
+            $"&exsentences=3&exintro=1&explaintext=1&generator=recentchanges&inprop=url&grcnamespace=0&grclimit={count}&grcdir=newer";
 
         if (cont != "")
             query += $"&grccontinue={cont}";

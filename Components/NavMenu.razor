@@ -62,8 +62,21 @@
 
     private string NavMenuIconClass => collapseNavMenu ? "oi-menu" : "oi-caret-bottom";
 
+    protected override void OnInitialized()
+    {
+        collapseNavMenu = true;
+    }
+
     private void ToggleNavMenu()
     {
         collapseNavMenu = !collapseNavMenu;
     }
+
+    public void ForceCollapse()
+    {
+        collapseNavMenu = true;
+
+        StateHasChanged();
+    }
+
 }

@@ -4,9 +4,9 @@
  
     <div class="app-container bg-app font-col">
        
-        <NavMenu PageTitle=@_pagetitle />
+        <NavMenu PageTitle=@_pagetitle @ref="navMenu" />
 
-        <main @onscroll=@OnScroll>
+        <main @onscroll=@OnScroll @onclick=@ForceMenuCollapse>
             <article>
                 @Body
             </article>
@@ -19,6 +19,8 @@
     private string _pagetitle;
 
     public bool HasScrolled { get; set; }
+
+    protected NavMenu navMenu;
 
     public string PageTitle
     {
@@ -33,11 +35,19 @@
     private void OnScroll()
     {
         HasScrolled = true;
+
+        ForceMenuCollapse();
+
     }
 
     protected override void OnParametersSet()
     {
         HasScrolled = false;
+    }
+
+    private void ForceMenuCollapse()
+    {
+        navMenu.ForceCollapse();
     }
 
 }
