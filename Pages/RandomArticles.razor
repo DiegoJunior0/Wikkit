@@ -4,6 +4,8 @@
 
 <PageTitleSetter PageTitle="Random" />
 
+<PullToReload OnReload=@ReloadPage />
+
 @if (articles == null || articles.Count == 0)
 {
     <div class="p-def">Loading...</div>
@@ -51,6 +53,13 @@
         if (isLoading) return;
 
         await GetArticles(loadMore);
+    }
+
+    private async Task ReloadPage()
+    {
+        articles.Clear();
+
+        await GetArticles(loadOnStart);
     }
 
 }

@@ -1,0 +1,34 @@
+﻿@inject IJSRuntime JSRuntime
+
+<div class="pull-to-refresh-icon" style="display: none; position: absolute; top: 2rem; left: 45%; z-index: 2000;">
+    <img src="images/refresh-icon.svg" style="width: 2rem; height: auto; fill: white;" />
+</div>
+
+@code {
+
+    [Parameter]
+    public EventCallback<bool> OnReload { get; set; }
+
+    private DotNetObjectReference<PullToReload> objectRef;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            objectRef = DotNetObjectReference.Create(this);
+            var module = await JSRuntime.InvokeAsync<IJSObjectReference>("import", "/js/reload.js");
+            await module.InvokeVoidAsync("setReloadContentInstance", objectRef);
+        }
+    }
+
+    [JSInvokable]
+    public async Task ReloadContent()
+    {
+        await OnReload.InvokeAsync(true);
+    }
+
+    public void Dispose()
+    {
+        objectRef?.Dispose();
+    }
+}
