@@ -25,13 +25,9 @@
             <ArticleCard ArticleData=article />
         }
 
-        @if (currentOffset > 0)
-        {
-            <span id="observerTarget">
-                <ArticleCard Title="Loading..." />
-            </span>
-        }
-        
+        <span id="observerTarget" style="@(currentOffset == 0 ? "display:none": "display: inherit;") ">
+            <ArticleCard Title="Loading..." />
+        </span>        
 
     </InfiniteScroll>
 
