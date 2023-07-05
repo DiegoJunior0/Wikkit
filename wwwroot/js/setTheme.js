@@ -6,3 +6,7 @@ export function setTheme(themeName) {
 export function setFontSize(fontSizeName) {
     document.documentElement.setAttribute('data-font-size', fontSizeName);
 }
+
+export function clearFocus(element) {
+    element.blur();
+}

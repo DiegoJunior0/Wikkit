@@ -1,12 +1,13 @@
 ﻿@page "/search"
 @using Wikkit.Data;
 @inject WikipediaDataService dataService;
+@inject IJSRuntime JSRuntime
 
 <PageTitleSetter PageTitle="Search" />
 
 <div class="search-bar p-def bg-sec">
     <EditForm Model="@searchModel" OnValidSubmit="@SearchSubmit">
-        <InputText class="bg-sec font-col b-rad-def" @bind-Value="@searchModel.SearchText" placeholder="Search..." />
+        <InputText @ref=searchInput class="bg-sec font-col b-rad-def" @bind-Value="@searchModel.SearchText" placeholder="Search..." />
     </EditForm>    
 </div>
 
@@ -41,9 +42,19 @@
 
     private int currentOffset;
 
+    private InputText searchInput { get; set; }
+
     private class SearchModel
     {
         public string SearchText;
+    }
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (firstRender)
+        {
+            searchInput.Element.Value.FocusAsync();
+        }        
     }
 
     private async void SearchSubmit()
@@ -56,6 +67,9 @@
         StateHasChanged();
 
         await GetArticles(searchModel.SearchText);
+
+        //var module = await JSRuntime.InvokeAsync<IJSObjectReference>("import", "./js/setTheme.js");
+        //await module.InvokeVoidAsync("clearFocus", DotNetObjectReference.Create(searchInput));
 
     }
 
