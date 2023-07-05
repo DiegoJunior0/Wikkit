@@ -1,90 +1,15 @@
-<?xml version="1.0"?>
-<svg
-    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-    xmlns="http://www.w3.org/2000/svg"
-    xmlns:cc="http://web.resource.org/cc/"
-    xmlns:xlink="http://www.w3.org/1999/xlink"
-    xmlns:dc="http://purl.org/dc/elements/1.1/"
-    xmlns:svg="http://www.w3.org/2000/svg"
-    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-    xmlns:ns1="http://sozi.baierouge.fr"
-    version="1.1"
-    xml:space="preserve"
-    enable-background="new 0 0 65 65"
-    y="0px"
-    x="0px"
-    viewBox="0 0 65 65"
-  >
-<g
-      id="Layer_3_copy_2"
-    >
-	<g
-        fill="#555753"
-      >
-		<path
-          d="m32.5 4.999c-5.405 0-10.444 1.577-14.699 4.282l-5.75-5.75v16.11h16.11l-6.395-6.395c3.18-1.787 6.834-2.82 10.734-2.82 12.171 0 22.073 9.902 22.073 22.074 0 2.899-0.577 5.664-1.599 8.202l4.738 2.762c1.47-3.363 2.288-7.068 2.288-10.964 0-15.164-12.337-27.501-27.5-27.501z"
-      />
-		<path
-          d="m43.227 51.746c-3.179 1.786-6.826 2.827-10.726 2.827-12.171 0-22.073-9.902-22.073-22.073 0-2.739 0.524-5.35 1.439-7.771l-4.731-2.851c-1.375 3.271-2.136 6.858-2.136 10.622 0 15.164 12.336 27.5 27.5 27.5 5.406 0 10.434-1.584 14.691-4.289l5.758 5.759v-16.112h-16.111l6.389 6.388z"
-      />
-	</g
-    >
-</g
-  >
-<metadata
-    ><rdf:RDF
-      ><cc:Work
-        ><dc:format
-          >image/svg+xml</dc:format
-        ><dc:type
-            rdf:resource="http://purl.org/dc/dcmitype/StillImage"
-        /><cc:license
-            rdf:resource="http://creativecommons.org/licenses/publicdomain/"
-        /><dc:publisher
-          ><cc:Agent
-              rdf:about="http://openclipart.org/"
-            ><dc:title
-              >Openclipart</dc:title
-            ></cc:Agent
-          ></dc:publisher
-        ><dc:title
-          >Refresh Icon</dc:title
-        ><dc:date
-          >2013-08-22T04:53:13</dc:date
-        ><dc:description
-          >A refresh icon</dc:description
-        ><dc:source
-          >https://openclipart.org/detail/182094/refresh-icon-by-pianobrad-182094</dc:source
-        ><dc:creator
-          ><cc:Agent
-            ><dc:title
-              >pianoBrad</dc:title
-            ></cc:Agent
-          ></dc:creator
-        ><dc:subject
-          ><rdf:Bag
-            ><rdf:li
-              >design</rdf:li
-            ><rdf:li
-              >icon</rdf:li
-            ><rdf:li
-              >refresh</rdf:li
-            ><rdf:li
-              >web</rdf:li
-            ></rdf:Bag
-          ></dc:subject
-        ></cc:Work
-      ><cc:License
-          rdf:about="http://creativecommons.org/licenses/publicdomain/"
-        ><cc:permits
-            rdf:resource="http://creativecommons.org/ns#Reproduction"
-        /><cc:permits
-            rdf:resource="http://creativecommons.org/ns#Distribution"
-        /><cc:permits
-            rdf:resource="http://creativecommons.org/ns#DerivativeWorks"
-        /></cc:License
-      ></rdf:RDF
-    ></metadata
-  ></svg
->
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="100%" height="100%" viewBox="0 0 70 70" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+    <g transform="matrix(2.74325,0,0,2.69197,-88.4794,-80.7695)">
+        <g id="Layer1">
+            <ellipse cx="45.012" cy="43.005" rx="12.394" ry="12.63" style="fill:white;"/>
+        </g>
+    </g>
+    <g id="Layer_3_copy_2" transform="matrix(0.909091,0,0,0.909091,5.45455,5.45459)">
+        <g>
+            <path d="M32.5,4.999C27.095,4.999 22.056,6.576 17.801,9.281L12.051,3.531L12.051,19.641L28.161,19.641L21.766,13.246C24.946,11.459 28.6,10.426 32.5,10.426C44.671,10.426 54.573,20.328 54.573,32.5C54.573,35.399 53.996,38.164 52.974,40.702L57.712,43.464C59.182,40.101 60,36.396 60,32.5C60,17.336 47.663,4.999 32.5,4.999Z" style="fill:rgb(0,70,217);fill-rule:nonzero;"/>
+            <path d="M43.227,51.746C40.048,53.532 36.401,54.573 32.501,54.573C20.33,54.573 10.428,44.671 10.428,32.5C10.428,29.761 10.952,27.15 11.867,24.729L7.136,21.878C5.761,25.149 5,28.736 5,32.5C5,47.664 17.336,60 32.5,60C37.906,60 42.934,58.416 47.191,55.711L52.949,61.47L52.949,45.358L36.838,45.358L43.227,51.746Z" style="fill:rgb(0,70,217);fill-rule:nonzero;"/>
+        </g>
+    </g>
+</svg>

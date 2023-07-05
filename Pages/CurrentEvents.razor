@@ -4,6 +4,8 @@
 
 <PageTitleSetter PageTitle="Current Events" />
 
+<PullToReload OnReload="@Reload" />
+
 @if (articles == null || articles.Count == 0)
 {
     <div class="p-def">Loading...</div>
@@ -75,13 +77,23 @@ else
 
             safety++;
         }  
-        
+
         articles.AddRange(newArticles);
 
         if (cont == "") daysOffset++;
 
         isLoading = false;
 
+    }
+
+    private async Task Reload()
+    {
+        daysOffset = 0;
+        cont = "";
+
+        articles.Clear();
+
+        await GetArticles();
     }
 
 }

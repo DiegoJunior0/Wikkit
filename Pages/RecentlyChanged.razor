@@ -4,6 +4,8 @@
 
 <PageTitleSetter PageTitle="Recently Changed" />
 
+<PullToReload OnReload=@Reload />
+
 @if (articles == null || articles.Count == 0)
 {
     <div class="p-def">Loading...</div>
@@ -48,6 +50,15 @@ else
         _cont = cont;
 
         viewedIndex += articleCount;
+    }
+
+    private async Task Reload()
+    {
+        _cont = "";
+        viewedIndex = 0;
+        articles.Clear();
+
+        await GetArticles();
     }
 
 }

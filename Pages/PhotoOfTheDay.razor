@@ -4,6 +4,8 @@
 
 <PageTitleSetter PageTitle="Picture of the Day" />
 
+<PullToReload OnReload="@Reload" />
+
 @if (articles == null || articles.Count == 0)
 {
     <div class="p-def">Loading...</div>
@@ -65,4 +67,14 @@ else
     {
         await GetArticles();
     }
+
+    private async Task Reload()
+    {
+        articles.Clear();
+
+        daysOffset = 0;
+
+        await GetArticles();
+    }
+
 }

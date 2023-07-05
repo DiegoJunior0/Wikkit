@@ -163,6 +163,16 @@ main {
     font-family: 'Roboto', Helvetica, Arial, sans-serif !important;
 }
 
+.pull-to-refresh-icon {
+    display: none;
+    position: fixed;
+    top: 1rem;
+    left: 45%;
+    z-index: 500;
+    width: 2rem;
+    height: 2rem;
+}
+
 .valid.modified:not([type=checkbox]) {
     outline: 1px solid #26b050;
 }

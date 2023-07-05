@@ -4,6 +4,8 @@
 
 <PageTitleSetter PageTitle="Most Viewed" />
 
+<PullToReload OnReload="@Reload" />
+
 @if (articles == null || articles.Count == 0)
 {
     <div class="p-def">Loading...</div>
@@ -44,6 +46,15 @@ else
         articles.AddRange(newArticles);
 
         viewedIndex += articleCount;
+    }
+
+    private async Task Reload() 
+    {
+        articles.Clear();
+
+        viewedIndex = 0;
+
+        await GetArticles();
     }
 
 }
