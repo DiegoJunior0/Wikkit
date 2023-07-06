@@ -150,12 +150,12 @@
     {
         if (_darkMode)
         {
-            var module = await JSRuntime.InvokeAsync<IJSObjectReference>("import", "./js/setTheme.js");
+            var module = await JSRuntime.InvokeAsync<IJSObjectReference>("import", "./js/setOptions.js");
             await module.InvokeVoidAsync("setTheme", "dark");
         }
         else
         {
-            var module = await JSRuntime.InvokeAsync<IJSObjectReference>("import", "./js/setTheme.js");
+            var module = await JSRuntime.InvokeAsync<IJSObjectReference>("import", "./js/setOptions.js");
             await module.InvokeVoidAsync("setTheme", "");
         }
     }
@@ -163,7 +163,7 @@
     private async Task UpdateFontSize()
     {
         
-        var module = await JSRuntime.InvokeAsync<IJSObjectReference>("import", "./js/setTheme.js");
+        var module = await JSRuntime.InvokeAsync<IJSObjectReference>("import", "./js/setOptions.js");
         await module.InvokeVoidAsync("setFontSize", _fontsize);
 
     }

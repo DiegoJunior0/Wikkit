@@ -265,7 +265,9 @@ public partial class WikipediaDataService
 
             results = results.OrderBy(a => a.index).ToList();
 
-            return (results, Convert.ToInt32(data.@continue["gsroffset"].ToString())); //TODO: Nasty! learn more about the stupid system.text.json
+            int cont = data.@continue == null ? 0 : Convert.ToInt32(data.@continue["gsroffset"].ToString());//TODO: Nasty! learn more about the stupid system.text.json
+
+            return (results, cont); 
         }
         catch (Exception ex)
         {

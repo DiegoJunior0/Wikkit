@@ -150,17 +150,30 @@ main {
     position: sticky;
     top: 0;
     margin-top: 0;
+    margin-right: 0;
     left: -0.5rem;
     z-index: 500;
-    width: 100%;
+    width: calc(100%-0.1rem);
 }
 
 .search-bar input {
-    width: calc(100% - (3 * var(--default-margin)));
+    width: calc(100% - (1 * var(--default-margin)));
     height: 1.7rem;
     border: solid;
     font-size: 1rem;
     font-family: 'Roboto', Helvetica, Arial, sans-serif !important;
+    padding: 0.5rem;
+}
+
+input.middle:focus {
+    outline-width: 0;
+}
+
+input:focus,
+select:focus,
+textarea:focus,
+button:focus {
+    outline: none;
 }
 
 .pull-to-refresh-icon {

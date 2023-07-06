@@ -68,8 +68,8 @@
 
         await GetArticles(searchModel.SearchText);
 
-        //var module = await JSRuntime.InvokeAsync<IJSObjectReference>("import", "./js/setTheme.js");
-        //await module.InvokeVoidAsync("clearFocus", DotNetObjectReference.Create(searchInput));
+        var module = await JSRuntime.InvokeAsync<IJSObjectReference>("import", "./js/utils.js");
+        await module.InvokeVoidAsync("clearFocus", searchInput.Element.Value);
 
     }
 
