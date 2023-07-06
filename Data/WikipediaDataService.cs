@@ -197,6 +197,64 @@ public partial class WikipediaDataService
         
     }
 
+    public async Task<List<ArticlePageData>> GetPicturesOfTheDayRand(int count)
+    {
+        List<ArticlePageData> pages = new();
+
+        Random rand = new Random();
+
+        DateTime startDate = new(2004, 5, 14);
+        DateTime endDate = DateTime.Now;
+
+        int days = (int)(endDate - startDate).TotalDays;
+
+        DateTime curDate = startDate.AddDays(rand.Next(0, days + 1));
+
+        int i = 0;
+
+        while (i < count)
+        {
+
+            string query = $"action=query&format=json&prop=info|description|images|cirrusdoc" +
+            $"&titles=Template:POTD/{curDate:yyyy-MM-dd}&inprop=url";
+
+            string jsonString = await GetWikiJson(query);
+
+            if (jsonString == "")
+            {
+                pages.Add(new ArticlePageData { title = "No results returned" });
+                return pages;
+            }
+
+            try
+            {
+                var data = JsonSerializer.Deserialize<QueryResponseInfo>(jsonString);
+
+                ArticlePageData page = data.query.pages.Values.ToList()[0];
+
+                int screenWidth = (int)DeviceDisplay.Current.MainDisplayInfo.Width;
+
+                page.images[0].url = await GetImageUrl(page.images[0].title, screenWidth);
+
+                page.title = $"Picture of the Day - {curDate: yyyy-MM-dd}";
+
+                pages.Add(page);
+
+            }
+            catch (Exception)
+            {
+                continue;
+            }
+
+            curDate = startDate.AddDays(rand.Next(0, days + 1));
+
+            i++;
+
+        }
+
+        return pages;
+    }
+
     public async Task<(List<ArticlePageData>, string @continue)> GetCurrentEvents(DateTime date, string cont = "")
     {
         //action=query&format=json&prop=info%7Cdescription%7Cextracts&titles=Portal%3ACurrent_events%2F2023_June_19
