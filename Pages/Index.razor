@@ -1,5 +1,7 @@
 ﻿@page "/"
+@using Wikkit.Services;
 @inject IJSRuntime JSRuntime
+@inject SettingsService settingsService;
 
 <PageTitleSetter PageTitle="Home" />
 
@@ -67,17 +69,14 @@
 
 <div class="bg-prim b-rad-def p-def mt-def ml-def mr-def">
 
-    <h3>Settings</h3>
-
     <ul class="list-def">
-        <li style="margin: 1.2rem 0;">
-            Dark Mode <RadzenSwitch @bind-Value=@_darkMode
-                                    Change=@(args => SetDarkMode(args)) style="float: right;" />
-        </li>
-        <li style="margin: 1.2rem 0;">
-            Font Size <RadzenDropDown TValue="string" @bind-Value=@_fontsize class="r-dropdown"
-                                      Data=@fontSizes Change=@(args => SetFontSize($"{args}")) style="float: right; width: 40%;" />
-        </li>
+        <NavLink class="nav-link" href="settings">
+            <li>
+                <i class="oi oi-cog"></i>
+                <strong>Settings</strong><br />
+                App settings
+            </li>
+        </NavLink>
     </ul>
 </div>
 
@@ -107,64 +106,13 @@
 </div>
 
 @code {
-    private bool _darkMode;
-    private string _fontsize;
-
-    private const string darkModeKeyStr = "DarkMode";
-    private const string fontSizeKeyStr = "FontSize";
-
-    private List<string> fontSizes = new() {"small", "medium", "large", "extralarge"} ;
-
+ 
     protected override async Task OnInitializedAsync()
     {
 
-        _darkMode = Preferences.Default.Get(darkModeKeyStr, true);
+        await settingsService.UpdateTheme();
 
-        _fontsize = Preferences.Default.Get(fontSizeKeyStr, "medium");
-
-        await UpdateTheme();
-
-        await UpdateFontSize();
-
-    }
-
-    private async void SetDarkMode(bool value)
-    {
-        _darkMode = value;
-
-        Preferences.Default.Set(darkModeKeyStr, _darkMode);
-
-        await UpdateTheme();
-    }
-
-    private async void SetFontSize(string value)
-    {
-        _fontsize = value;
-
-        Preferences.Default.Set(fontSizeKeyStr, _fontsize);
-
-        await UpdateFontSize();
-    }
-
-    private async Task UpdateTheme()
-    {
-        if (_darkMode)
-        {
-            var module = await JSRuntime.InvokeAsync<IJSObjectReference>("import", "./js/setOptions.js");
-            await module.InvokeVoidAsync("setTheme", "dark");
-        }
-        else
-        {
-            var module = await JSRuntime.InvokeAsync<IJSObjectReference>("import", "./js/setOptions.js");
-            await module.InvokeVoidAsync("setTheme", "");
-        }
-    }
-
-    private async Task UpdateFontSize()
-    {
-        
-        var module = await JSRuntime.InvokeAsync<IJSObjectReference>("import", "./js/setOptions.js");
-        await module.InvokeVoidAsync("setFontSize", _fontsize);
+        await settingsService.UpdateFontSize();
 
     }
 

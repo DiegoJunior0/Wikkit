@@ -1,0 +1,46 @@
+﻿@page "/settings"
+@using Wikkit.Services;
+@inject IJSRuntime JSRuntime
+@inject SettingsService settings
+
+<PageTitleSetter PageTitle="Search" />
+
+<div class="bg-prim b-rad-def p-def mt-def ml-def mr-def">
+
+    <h3>Visual</h3>
+
+    <ul class="list-def">
+        <li style="margin: 1.2rem 0;">
+            Dark Mode <RadzenSwitch @bind-Value=@currentSettings.DarkMode
+                                    Change=@(args => settings.SetDarkMode(args)) style="float: right;" />
+        </li>
+        <li style="margin: 1.2rem 0;">
+            Font Size <RadzenDropDown TValue="string" @bind-Value=@currentSettings.FontSize class="r-dropdown"
+                                      Data=@fontSizes Change=@(args => settings.SetFontSize($"{args}")) style="float: right; width: 40%;" />
+        </li>
+    </ul>
+</div>
+
+<div class="bg-prim b-rad-def p-def mt-def ml-def mr-def">
+
+    <h3>Feeds</h3>
+
+    <ul class="list-def">
+        <li style="margin: 1.2rem 0;">
+            Randomize Pictures Feed <RadzenSwitch @bind-Value=@currentSettings.RandomizePictures
+                                    Change=@(() => settings.UpdateSettings(currentSettings)) style="float: right;" />
+        </li>
+    </ul>
+</div>
+
+@code {
+    SettingsData currentSettings;
+
+    private List<string> fontSizes = new() { "small", "medium", "large", "extralarge" };
+
+    protected override void OnInitialized()
+    {
+        currentSettings = settings.GetSettings();
+    }
+
+}

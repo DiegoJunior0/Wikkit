@@ -1,7 +1,9 @@
 ﻿using Microsoft.Extensions.Logging;
 using Wikkit.Data;
+using Wikkit.Services;
 using BlazorBootstrap;
 using Microsoft.AspNetCore.Components.Web;
+using Microsoft.JSInterop;
 
 namespace Wikkit;
 
@@ -26,7 +28,9 @@ public static class MauiProgram
 		builder.Logging.AddDebug();
 #endif
 
+
         builder.Services.AddSingleton<WikipediaDataService>().AddScoped<HttpClient>();
+        builder.Services.AddScoped<SettingsService>();
 
         return builder.Build();
 	}

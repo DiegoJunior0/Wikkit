@@ -98,7 +98,7 @@ main {
 }
 
 .menushow {
-    height: calc(var(--nav-top-height) + (7 * (var(--nav-item-height) + 0.5rem)) + 1rem);
+    height: calc(var(--nav-top-height) + (8 * (var(--nav-item-height) + 0.5rem)) + 1rem);
 }
 
 .menu-item {
