@@ -1,7 +1,10 @@
 ﻿@page "/settings"
+@using Microsoft.Extensions.Logging;
 @using Wikkit.Services;
+@using Wikkit.Data
 @inject IJSRuntime JSRuntime
 @inject SettingsService settings
+@inject Logger<WikipediaDataService> logger
 
 <PageTitleSetter PageTitle="Search" />
 
@@ -29,6 +32,17 @@
         <li style="margin: 1.2rem 0;">
             Randomize Pictures Feed <RadzenSwitch @bind-Value=@currentSettings.RandomizePictures
                                     Change=@(() => settings.UpdateSettings(currentSettings)) style="float: right;" />
+        </li>
+    </ul>
+</div>
+
+<div class="bg-prim b-rad-def p-def mt-def ml-def mr-def">
+
+    <h3>Error Log</h3>
+
+    <ul class="list-def">
+        <li style="margin: 1.2rem 0;">
+            
         </li>
     </ul>
 </div>

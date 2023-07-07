@@ -25,10 +25,10 @@ public static class MauiProgram
 
 #if DEBUG
         builder.Services.AddBlazorWebViewDeveloperTools();
-		builder.Logging.AddDebug();
+
 #endif
-
-
+        builder.Logging.AddDebug();
+        builder.Services.AddScoped<Logger<WikipediaDataService>>();
         builder.Services.AddSingleton<WikipediaDataService>().AddScoped<HttpClient>();
         builder.Services.AddScoped<SettingsService>();
 

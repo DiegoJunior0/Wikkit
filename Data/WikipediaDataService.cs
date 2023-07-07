@@ -1,11 +1,13 @@
 ﻿using Microsoft.AspNetCore.Components.Web;
+using Microsoft.Extensions.Logging;
+using Microsoft.VisualBasic;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text.Json;
-
+using System.Web;
 
 namespace Wikkit.Data;
 public partial class WikipediaDataService
@@ -13,10 +15,12 @@ public partial class WikipediaDataService
     
     private const string apiEndpoint = "https://en.wikipedia.org/w/api.php";
     private HttpClient _client;
+    private readonly ILogger<WikipediaDataService> logger;
 
-    public WikipediaDataService(HttpClient client)
+    public WikipediaDataService(HttpClient client, ILogger<WikipediaDataService> logger)
     {
         _client = client;
+        this.logger = logger;
     }
 
     private async Task<string> GetWikiJson(string query)
@@ -159,35 +163,15 @@ public partial class WikipediaDataService
         while (curDate.ToString() != endDate.ToString())
         {
 
-            string query = $"action=query&format=json&prop=info|description|images|cirrusdoc" +
-            $"&titles=Template:POTD/{curDate:yyyy-MM-dd}&inprop=url";
-
-            string jsonString = await GetWikiJson(query);
-
-            if (jsonString == "")
-            {
-                pages.Add(new ArticlePageData { title = "No results returned" } );
-            }
-
             try
             {
-                var data = JsonSerializer.Deserialize<QueryResponseInfo>(jsonString);
-
-                ArticlePageData page = data.query.pages.Values.ToList()[0];
-
-                int screenWidth = (int)DeviceDisplay.Current.MainDisplayInfo.Width;
-
-                page.images[0].url = await GetImageUrl(page.images[0].title, screenWidth);
-
-                page.title = $"Picture of the Day - {curDate: yyyy-MM-dd}";
-
-                pages.Add(page);                
-                
+                ArticlePageData page = await GetPictureOfDay(curDate);
+                pages.Add(page);
             }
             catch (Exception ex)
             {
-                pages.Add(new ArticlePageData { title = ex.Message } );
-            }
+                pages.Add(new ArticlePageData { title = ex.Message });
+            }       
 
             curDate = curDate.AddDays(-1);
 
@@ -203,7 +187,7 @@ public partial class WikipediaDataService
 
         Random rand = new Random();
 
-        DateTime startDate = new(2004, 5, 14);
+        DateTime startDate = new(2007, 1, 1);
         DateTime endDate = DateTime.Now;
 
         int days = (int)(endDate - startDate).TotalDays;
@@ -215,36 +199,16 @@ public partial class WikipediaDataService
         while (i < count)
         {
 
-            string query = $"action=query&format=json&prop=info|description|images|cirrusdoc" +
-            $"&titles=Template:POTD/{curDate:yyyy-MM-dd}&inprop=url";
-
-            string jsonString = await GetWikiJson(query);
-
-            if (jsonString == "")
-            {
-                pages.Add(new ArticlePageData { title = "No results returned" });
-                return pages;
-            }
-
             try
             {
-                var data = JsonSerializer.Deserialize<QueryResponseInfo>(jsonString);
-
-                ArticlePageData page = data.query.pages.Values.ToList()[0];
-
-                int screenWidth = (int)DeviceDisplay.Current.MainDisplayInfo.Width;
-
-                page.images[0].url = await GetImageUrl(page.images[0].title, screenWidth);
-
-                page.title = $"Picture of the Day - {curDate: yyyy-MM-dd}";
-
+                ArticlePageData page = await GetPictureOfDay(curDate);
                 pages.Add(page);
-
             }
             catch (Exception)
             {
+                curDate = startDate.AddDays(rand.Next(0, days + 1));
                 continue;
-            }
+            }            
 
             curDate = startDate.AddDays(rand.Next(0, days + 1));
 
@@ -253,6 +217,51 @@ public partial class WikipediaDataService
         }
 
         return pages;
+    }
+
+    private async Task<ArticlePageData> GetPictureOfDay(DateTime date)
+    {
+        string query = $"action=query&format=json&prop=info|description|images" +
+            $"&titles=Template:POTD/{date:yyyy-MM-dd}&inprop=url";
+
+        string jsonString = await GetWikiJson(query);
+
+        if (jsonString == "")
+        {
+            throw new Exception("No results returned");
+        }
+
+        try
+        {
+            var data = JsonSerializer.Deserialize<QueryResponseInfo>(jsonString);
+
+            ArticlePageData page = data.query.pages.Values.ToList()[0];
+
+            int screenWidth = (int)DeviceDisplay.Current.MainDisplayInfo.Width;
+
+            if (page.images == null)
+            {
+                throw new Exception($"Page '{page.fullurl}', returned no images");
+            }
+
+            if (page.images.Count > 1)
+            {
+                page.images[0].url = await GetImageUrl(page.images[1].title, screenWidth);
+            }
+            else
+            {
+                page.images[0].url = await GetImageUrl(page.images[0].title, screenWidth);
+            }
+
+            page.title = $"Picture of the Day - {date: yyyy-MM-dd}";
+
+            return page;
+
+        }
+        catch (Exception ex)
+        {
+            throw new Exception(ex.Message);
+        }
     }
 
     public async Task<(List<ArticlePageData>, string @continue)> GetCurrentEvents(DateTime date, string cont = "")
@@ -335,7 +344,7 @@ public partial class WikipediaDataService
 
     public async Task<string> GetImageUrl(string title, int size)
     {
-        string query = $"action=query&format=json&prop=imageinfo&iiprop=url&iiurlwidth={size}&titles={title}";
+        string query = $"action=query&format=json&prop=imageinfo&iiprop=url&iiurlwidth={size}&titles={HttpUtility.UrlEncode(title)}";
 
         string jsonString = await GetWikiJson(query);
 
