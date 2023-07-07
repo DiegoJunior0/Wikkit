@@ -1,0 +1,74 @@
+﻿@page "/articlehistory"
+@using Wikkit.Data;
+@using Wikkit.Services;
+@inject ArticleHistoryService history;
+
+<PageTitleSetter PageTitle="Article History" />
+
+@if (firstLoad)
+{
+    <div class="p-def">Loading...</div>
+}
+else
+{
+
+    @if (articles.Count == 0 & firstLoad == false)
+    {
+        <div class="p-def">No History</div>
+    } else
+    {
+        <InfiniteScroll ObserverTargetId="observerTarget" ObservableTargetReached="(e) => LoadMore()">
+
+            @foreach (var article in articles)
+            {
+                <ArticleCard ArticleData=article AddToHistory=false />
+            }
+
+            <span id="observerTarget" style="@(remain == 0 ? "display:none": "display: inherit;") ">
+                <ArticleCard Title="Loading..." />
+            </span>
+
+        </InfiniteScroll>
+    }    
+
+}
+
+@code {
+    List<ArticlePageData> articles = new();
+
+    private int offset = 0;
+
+    private const int toget = 10;
+
+    private int remain = int.MaxValue;
+
+    private bool firstLoad = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await GetArticles();
+
+        firstLoad = false;
+    }
+
+    private async Task GetArticles()
+    {
+
+        if (remain == 0) return;
+
+        (var newArticles, int remaining) = await history.GetHistory(offset, toget);
+
+        articles.AddRange(newArticles);
+
+        remain = remaining;
+
+        offset += newArticles.Count;
+
+    }
+
+    private async Task LoadMore()
+    {
+        await GetArticles();
+    }
+
+}

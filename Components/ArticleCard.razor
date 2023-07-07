@@ -1,5 +1,7 @@
 ﻿@using Wikkit.Data;
+@using Wikkit.Services;
 @inject WikipediaDataService wikipediaDataService
+@inject ArticleHistoryService history
 
 <div class="articlecard @(ArticleData.viewed ? "bg-prim-sel" : "bg-prim")" @onclick=OpenLink>
     @if (ArticleData == null)
@@ -44,6 +46,11 @@
 
     [Parameter]
     public string Title { get; set; }
+
+    [Parameter]
+    public bool AddToHistory { get => addToHistory; set { addToHistory = value; } }
+
+    private bool addToHistory = true;
 
     public string FirstParagraph;
     private const int minParagraphLength = 50;
@@ -102,6 +109,11 @@
         Browser.Default.OpenAsync(uri, BrowserLaunchMode.SystemPreferred);
 
         ArticleData.viewed = true;
+
+        if (addToHistory)
+        {
+            history.AddToHistory(ArticleData.pageid);
+        }
     }
 
 }

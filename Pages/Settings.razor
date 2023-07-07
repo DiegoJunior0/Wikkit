@@ -5,6 +5,7 @@
 @inject IJSRuntime JSRuntime
 @inject SettingsService settings
 @inject Logger<WikipediaDataService> logger
+@inject ArticleHistoryService history
 
 <PageTitleSetter PageTitle="Search" />
 
@@ -32,6 +33,17 @@
         <li style="margin: 1.2rem 0;">
             Randomize Pictures Feed <RadzenSwitch @bind-Value=@currentSettings.RandomizePictures
                                     Change=@(() => settings.UpdateSettings(currentSettings)) style="float: right;" />
+        </li>
+    </ul>
+</div>
+
+<div class="bg-prim b-rad-def p-def mt-def ml-def mr-def">
+
+    <h3>History/Bookmarks</h3>
+
+    <ul class="list-def">
+        <li style="margin: 1.2rem 0;">
+            Clear History <RadzenButton Text="Clear" Click=@(() => history.ClearHistory()) style="width=25%; float: right;" />
         </li>
     </ul>
 </div>

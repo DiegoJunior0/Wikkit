@@ -85,15 +85,28 @@ public partial class WikipediaDataService
     {
 
         string query = $"action=query&format=json&pageids={articleID}" +
-            $"&prop=info|pageimages|description|extracts&inprop=url&pithumbsize=100";
+            $"&prop=info|pageimages|description|extracts&inprop=url&pithumbsize=100" +
+            $"&exsentences=3&exintro=1&explaintext=1";
 
         string jsonString = await GetWikiJson(query);
 
-        var data = JsonSerializer.Deserialize<QueryResponseInfo>(jsonString);
+        if (jsonString == "")
+        {
+            return new ArticlePageData { title = "No results returned" };
+        }
 
-        ArticlePageData articlePageData = data.query.pages[articleID.ToString()];       
+        try
+        {
+            var data = JsonSerializer.Deserialize<QueryResponseInfo>(jsonString);
 
-        return articlePageData;  
+            ArticlePageData articlePageData = data.query.pages[articleID.ToString()];
+
+            return articlePageData;
+        }
+        catch (Exception ex)
+        {
+            return new ArticlePageData { title = ex.Message };
+        }        
 
     }
 
@@ -244,14 +257,14 @@ public partial class WikipediaDataService
                 throw new Exception($"Page '{page.fullurl}', returned no images");
             }
 
-            if (page.images.Count > 1)
-            {
-                page.images[0].url = await GetImageUrl(page.images[1].title, screenWidth);
-            }
-            else
-            {
+            //if (page.images.Count > 1)
+            //{
+            //    page.images[0].url = await GetImageUrl(page.images[1].title, screenWidth);
+            //}
+            //else
+            //{
                 page.images[0].url = await GetImageUrl(page.images[0].title, screenWidth);
-            }
+            //}
 
             page.title = $"Picture of the Day - {date: yyyy-MM-dd}";
 
