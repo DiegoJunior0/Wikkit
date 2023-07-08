@@ -257,14 +257,10 @@ public partial class WikipediaDataService
                 throw new Exception($"Page '{page.fullurl}', returned no images");
             }
 
-            //if (page.images.Count > 1)
-            //{
-            //    page.images[0].url = await GetImageUrl(page.images[1].title, screenWidth);
-            //}
-            //else
-            //{
-                page.images[0].url = await GetImageUrl(page.images[0].title, screenWidth);
-            //}
+            if (page.images[0].title.EndsWith(".svg")) page.images.RemoveAt(0);
+            
+            page.images[0].url = await GetImageUrl(page.images[0].title, screenWidth);
+            
 
             page.title = $"Picture of the Day - {date: yyyy-MM-dd}";
 
