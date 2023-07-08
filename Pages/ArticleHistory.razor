@@ -21,7 +21,8 @@ else
 
             @foreach (var article in articles)
             {
-                <ArticleCard ArticleData=article AddToHistory=false />
+                <ArticleCard ArticleData=article AddToHistory=false 
+                    LargeImage=@(article.title.StartsWith("Picture of the Day") ? true : false) />
             }
 
             <span id="observerTarget" style="@(remain == 0 ? "display:none": "display: inherit;") ">
@@ -44,19 +45,19 @@ else
 
     private bool firstLoad = true;
 
-    protected override async Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
-        await GetArticles();
+        GetArticles();
 
         firstLoad = false;
     }
 
-    private async Task GetArticles()
+    private void GetArticles()
     {
 
         if (remain == 0) return;
 
-        (var newArticles, int remaining) = await history.GetHistory(offset, toget);
+        (var newArticles, int remaining) = history.GetHistory(offset, toget);
 
         articles.AddRange(newArticles);
 
@@ -66,9 +67,9 @@ else
 
     }
 
-    private async Task LoadMore()
+    private void LoadMore()
     {
-        await GetArticles();
+        GetArticles();
     }
 
 }

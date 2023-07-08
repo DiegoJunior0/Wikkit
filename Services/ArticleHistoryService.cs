@@ -7,7 +7,7 @@ namespace Wikkit.Services;
 
 public class ArticleHistoryService
 {
-    private List<int> _articles = new();
+    private List<ArticlePageData> _articles = new();
 
     private const int HistoryCount = 50;
     private const string historypref = "history";
@@ -28,7 +28,15 @@ public class ArticleHistoryService
 
         if (articlesStr == "") return;
 
-        _articles = JsonSerializer.Deserialize<List<int>>(articlesStr);
+        try
+        {
+            _articles = JsonSerializer.Deserialize<List<ArticlePageData>>(articlesStr);
+        }
+        catch (Exception)
+        {
+
+        }
+        
     }
 
     private void SaveHistory()
@@ -36,9 +44,12 @@ public class ArticleHistoryService
         Preferences.Set(historypref, JsonSerializer.Serialize(_articles));
     }
 
-    public void AddToHistory(int articleID)
+    public void AddToHistory(ArticlePageData articleData)
     {
-        _articles.Insert(0, articleID);
+
+        _articles.RemoveAll(a => a.pageid == articleData.pageid);
+
+        _articles.Insert(0, articleData);
 
         if (_articles.Count > HistoryCount)
         {
@@ -49,7 +60,7 @@ public class ArticleHistoryService
 
     }
 
-    public async Task<(List<ArticlePageData>, int remain)> GetHistory(int index, int count)
+    public (List<ArticlePageData>, int remain) GetHistory(int index, int count)
     {
         if (index > _articles.Count - 1) return (new List<ArticlePageData>(), 0);
 
@@ -57,7 +68,7 @@ public class ArticleHistoryService
 
         for (int i = index; i < index + count & i < _articles.Count; i++)
         {
-            ArticlePageData page = await dataService.GetArticleInfo(_articles[i]);
+            ArticlePageData page = _articles[i];
 
             articles.Add(page);
         }
