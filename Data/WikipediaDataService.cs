@@ -64,7 +64,7 @@ public partial class WikipediaDataService
 
         if (jsonString == "")
         {
-            return new List<ArticlePageData> { new ArticlePageData { title = "No results returned" } };
+            return new List<ArticlePageData> { new ArticlePageData { title = "No results returned", isInfo = true } };
         }
 
         try
@@ -76,7 +76,7 @@ public partial class WikipediaDataService
         }
         catch (Exception ex)
         {
-            return new List<ArticlePageData>{ new ArticlePageData { title = ex.Message } };
+            return new List<ArticlePageData>{ new ArticlePageData { title = ex.Message, isInfo = true } };
         }
         
     }
@@ -92,7 +92,7 @@ public partial class WikipediaDataService
 
         if (jsonString == "")
         {
-            return new ArticlePageData { title = "No results returned" };
+            return new ArticlePageData { title = "No results returned", isInfo = true };
         }
 
         try
@@ -105,7 +105,7 @@ public partial class WikipediaDataService
         }
         catch (Exception ex)
         {
-            return new ArticlePageData { title = ex.Message };
+            return new ArticlePageData { title = ex.Message, isInfo = true };
         }        
 
     }
@@ -120,18 +120,25 @@ public partial class WikipediaDataService
 
         if (jsonString == "")
         {
-            return new List<ArticlePageData> { new ArticlePageData { title = "No results returned" } };
+            return new List<ArticlePageData> { new ArticlePageData { title = "No results returned", isInfo = true } };
         }
 
         try
         {
             var data = JsonSerializer.Deserialize<QueryResponseInfo>(jsonString);
 
+            if (data == null || data.query == null)
+            {
+                return new List<ArticlePageData> { new ArticlePageData { title = "No results returned",
+                    description = "Most viewed often has issues, try again later, tap for details",
+                    fullurl="https://phabricator.wikimedia.org/T254211", isInfo=true}};
+            }
+
             return data.query.pages.Values.Where(p => p.ns != -1).ToList();
         }
         catch (Exception ex)
         {
-            return new List<ArticlePageData> { new ArticlePageData { title = ex.Message } };
+            return new List<ArticlePageData> { new ArticlePageData { title = ex.Message, isInfo = true } };
         }
 
     }
@@ -148,7 +155,7 @@ public partial class WikipediaDataService
 
         if (jsonString == "")
         {
-            return (new List<ArticlePageData> { new ArticlePageData { title = "No results returned" } }, "");
+            return (new List<ArticlePageData> { new ArticlePageData { title = "No results returned", isInfo = true } }, "");
         }
 
         try
@@ -159,7 +166,7 @@ public partial class WikipediaDataService
         }
         catch (Exception ex)
         {
-            return (new List<ArticlePageData> { new ArticlePageData { title = ex.Message } }, "");
+            return (new List<ArticlePageData> { new ArticlePageData { title = ex.Message, isInfo = true } }, "");
         }        
 
     }
@@ -183,7 +190,7 @@ public partial class WikipediaDataService
             }
             catch (Exception ex)
             {
-                pages.Add(new ArticlePageData { title = ex.Message });
+                pages.Add(new ArticlePageData { title = ex.Message, isInfo = true });
             }       
 
             curDate = curDate.AddDays(-1);
@@ -289,7 +296,7 @@ public partial class WikipediaDataService
 
         if (jsonString == "")
         {
-            return (new List<ArticlePageData> { new ArticlePageData { title = "No results returned" } },"");
+            return (new List<ArticlePageData> { new ArticlePageData { title = "No results returned", isInfo = true } },"");
         }
 
         try
@@ -310,7 +317,7 @@ public partial class WikipediaDataService
 
         } catch (Exception ex)
         {
-            return (new List<ArticlePageData> { new ArticlePageData { title = ex.Message } }, "");
+            return (new List<ArticlePageData> { new ArticlePageData { title = ex.Message, isInfo = true } }, "");
         }        
 
     }
@@ -325,7 +332,7 @@ public partial class WikipediaDataService
 
         if (jsonString == "")
         {
-            return (new List<ArticlePageData> { new ArticlePageData { title = "No results returned" } }, 0);
+            return (new List<ArticlePageData> { new ArticlePageData { title = "No results returned", isInfo = true } }, 0);
         }
 
         try
@@ -334,7 +341,7 @@ public partial class WikipediaDataService
 
             if (data.query == null)
             {
-                return (new() { new ArticlePageData { title = "No results"} }, 0);
+                return (new() { new ArticlePageData { title = "No results", isInfo = true } }, 0);
             }
 
             List<ArticlePageData> results = data.query.pages.Values.ToList();
@@ -347,7 +354,7 @@ public partial class WikipediaDataService
         }
         catch (Exception ex)
         {
-            return (new () { new ArticlePageData { title = ex.Message } }, 0);
+            return (new () { new ArticlePageData { title = ex.Message, isInfo = true } }, 0);
         }
     }
 

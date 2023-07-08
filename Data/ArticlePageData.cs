@@ -22,5 +22,6 @@ public class ArticlePageData
     public string descriptionsource { get; set; }
     public string extract { get; set; }
     public bool viewed { get; set; }
+    public bool isInfo { get; set; }
 }
 

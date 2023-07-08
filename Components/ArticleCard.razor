@@ -68,6 +68,9 @@
         if (Title != null)
             ArticleData.title = Title;
 
+        if (ArticleData.isInfo)
+            addToHistory = false;
+
     }
 
     private string GetFirstParagraph()
