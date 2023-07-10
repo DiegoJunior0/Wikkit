@@ -2,8 +2,7 @@
 <div class="menu-container bg-sec">
     <div class="menu-bar">
         <div class="container-fluid" style="padding: 0.7rem;">        
-            <div class="navbar-toggler" @onclick="ToggleNavMenu" style="border: none; display: inline-block;
-                width: calc(100% - 1.5rem);">
+            <div class="navbar-toggler" @onclick="ToggleNavMenu">
                 <span class="oi @(NavMenuIconClass)" style="margin-right: 0.5rem;"></span>
                 <span class="navbar-brand" href=""><strong>@PageTitle</strong></span>
             </div>
@@ -14,55 +13,55 @@
     <div class="@NavMenuCssClass" style="padding: 0.5rem;" @onclick="ToggleNavMenu">
         <nav class="flex-column">
             <div class="menu-item">
-                <NavLink href="" Match="NavLinkMatch.All">
+                <NavLink href="" Match="NavLinkMatch.All" class="menu-navlink">
                     <span class="oi oi-home" aria-hidden="true"></span> Home
                 </NavLink>
             </div>
             <hr style="margin: 0.1rem" />
             <div class="menu-item">
-                <NavLink href="random">
+                <NavLink href="random" class="menu-navlink">
                     <span class="oi oi-random" aria-hidden="true"></span> Random
                 </NavLink>
             </div>
             <div class="menu-item">
-                <NavLink href="mostviewed">
+                <NavLink href="mostviewed" class="menu-navlink">
                     <span class="oi oi-eye" aria-hidden="true"></span> Most Viewed
                 </NavLink>
             </div>
             <div class="menu-item">
-                <NavLink href="currentevents">
+                <NavLink href="currentevents" class="menu-navlink">
                     <span class="oi oi-bullhorn" aria-hidden="true"></span> Current Events
                 </NavLink>
             </div>
             <div class="menu-item">
-                <NavLink href="pictureoftheday">
+                <NavLink href="pictureoftheday" class="menu-navlink">
                     <span class="oi oi-image" aria-hidden="true"></span> Picture of the Day
                 </NavLink>
             </div>
             <div class="menu-item">
-                <NavLink href="recentlyChanged">
+                <NavLink href="recentlyChanged" class="menu-navlink">
                     <span class="oi oi-pencil" aria-hidden="true"></span> Recently Changed
                 </NavLink>
             </div>
             <div class="menu-item">
-                <NavLink href="search">
+                <NavLink href="search" class="menu-navlink">
                     <span class="oi oi-magnifying-glass" aria-hidden="true"></span> Search
                 </NavLink>
             </div>
             <hr style="margin: 0.1rem" />
             <div class="menu-item">
-                <NavLink href="articlehistory">
+                <NavLink href="articlehistory" class="menu-navlink">
                     <span class="oi oi-list" aria-hidden="true"></span> History
                 </NavLink>
             </div>
             <div class="menu-item">
-                <NavLink href="bookmarks">
+                <NavLink href="bookmarks" class="menu-navlink">
                     <span class="oi oi-badge" aria-hidden="true"></span> Bookmarks
                 </NavLink>
             </div>
             <hr style="margin: 0.1rem" />
             <div class="menu-item">
-                <NavLink href="settings">
+                <NavLink href="settings" class="menu-navlink">
                     <span class="oi oi-cog" aria-hidden="true"></span> Settings
                 </NavLink>
             </div>

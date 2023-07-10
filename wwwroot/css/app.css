@@ -4,7 +4,7 @@
     --default-margin: 0.5rem;
     --default-border-radii: 5px;
     --nav-top-height: 3rem;
-    --nav-item-height: 1.4rem;
+    --nav-item-height: 2rem;
 }
 
 html, body {
@@ -90,6 +90,13 @@ main {
     height: var(--nav-top-height);
 }
 
+.navbar-toggler {
+    padding-top: var(--default-margin);
+    padding-bottom: var(--default-margin);
+    display: inline-block; 
+    width: calc(100% - 2rem);
+}
+
 .menu-container {
     position: absolute;
     width: 100%;
@@ -106,12 +113,18 @@ main {
 }
 
 .menushow {
-    height: calc(var(--nav-top-height) + (9 * (var(--nav-item-height) + 0.2rem)) + 3.2rem);
+    height: calc(var(--nav-top-height) + (9 * (var(--nav-item-height))));
 }
 
-.menu-item {
-    padding: 0.3rem;
+.menu-item {    
+}
+
+.menu-item .menu-navlink {
+    display: inline-block;
     height: var(--nav-item-height);
+    line-height: var(--nav-item-height);
+    width: calc(100% - var(--default-margin));
+    padding-left: var(--default-margin);
 }
 
 .menu-item .oi {
