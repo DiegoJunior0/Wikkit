@@ -1,0 +1,84 @@
+﻿@page "/bookmarks"
+@using Wikkit.Data;
+@using Wikkit.Services;
+@inject BookmarkService bookmarks;
+
+<PageTitleSetter PageTitle="Bookmarks" />
+
+@if (firstLoad)
+{
+    <div class="p-def">Loading...</div>
+}
+else
+{
+
+    @if (articles.Count == 0 & firstLoad == false)
+    {
+        <div class="p-def">No Bookmarks</div>
+    }
+    else
+    {
+        <InfiniteScroll ObserverTargetId="observerTarget" ObservableTargetReached="(e) => LoadMore()">
+
+            @foreach (var article in articles)
+            {
+                <ArticleCard ArticleData=article AddToHistory=false
+                             LargeImage=@(article.title.StartsWith("Picture of the Day") ? true : false)
+                             OnBookmarked="(e) => OnArticleBookmarked(e)"/>
+            }
+
+            <span id="observerTarget" style="@(remain == 0 ? "display:none": "display: inherit;") ">
+                <ArticleCard Title="Loading..." />
+            </span>
+
+        </InfiniteScroll>
+    }
+
+}
+
+@code {
+    List<ArticlePageData> articles = new();
+
+    private int offset = 0;
+
+    private const int toget = 10;
+
+    private int remain = int.MaxValue;
+
+    private bool firstLoad = true;
+
+    protected override void OnInitialized()
+    {
+        GetArticles();
+
+        firstLoad = false;
+    }
+
+    private void GetArticles()
+    {
+
+        if (remain == 0) return;
+
+        (var newArticles, int remaining) = bookmarks.GetBookmarks(offset, toget);
+
+        articles.AddRange(newArticles);
+
+        remain = remaining;
+
+        offset += newArticles.Count;
+
+    }
+
+    private void LoadMore()
+    {
+        GetArticles();
+    }
+
+    private void OnArticleBookmarked(bool args)
+    {
+        (var newArticles, int remaining) = bookmarks.GetBookmarks(0, articles.Count);
+
+        articles = newArticles;
+    }
+
+}

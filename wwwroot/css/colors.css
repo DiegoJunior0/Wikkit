@@ -57,3 +57,7 @@
     height: 2rem !important;
     margin: 0;
 }
+
+.fore-col {
+    background-color: var(--font-color);
+}

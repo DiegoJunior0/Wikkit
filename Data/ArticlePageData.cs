@@ -23,5 +23,6 @@ public class ArticlePageData
     public string extract { get; set; }
     public bool viewed { get; set; }
     public bool isInfo { get; set; }
+    public bool bookmarked { get; set; }
 }
 

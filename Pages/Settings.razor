@@ -6,6 +6,7 @@
 @inject SettingsService settings
 @inject Logger<WikipediaDataService> logger
 @inject ArticleHistoryService history
+@inject BookmarkService bookmarks;
 
 <PageTitleSetter PageTitle="Search" />
 
@@ -44,6 +45,11 @@
     <ul class="list-def">
         <li style="margin: 1.2rem 0;">
             Clear History <RadzenButton Text="Clear" Click=@(() => history.ClearHistory()) style="width=25%; float: right;" />
+        </li>
+    </ul>
+    <ul class="list-def">
+        <li style="margin: 1.2rem 0;">
+            Clear Bookmarks <RadzenButton Text="Clear" Click=@(() => bookmarks.ClearAll()) style="width=25%; float: right;" />
         </li>
     </ul>
 </div>

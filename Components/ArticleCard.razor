@@ -2,6 +2,7 @@
 @using Wikkit.Services;
 @inject WikipediaDataService wikipediaDataService
 @inject ArticleHistoryService history
+@inject BookmarkService bookmarks;
 
 <div class="articlecard @(ArticleData.viewed ? "bg-prim-sel" : "bg-prim")" @onclick=OpenLink>
     @if (ArticleData == null)
@@ -22,13 +23,21 @@
 
             <div class="card-title"><strong>@ArticleData.title</strong></div>
 
+            @if(!ArticleData.isInfo & ArticleData.pageid != 0)
+            {
+                <div class="card-bookmark @(ArticleData.bookmarked ? "card-bookmark-active" : "")"
+                @onclick=Bookmark @onclick:stopPropagation="true">
+                    <span class="fore-col">_</span>
+                </div>
+            }            
+
             @if (ArticleData.thumbnail != null)
             {
                 <img class="card-thumb" src="@ArticleData.thumbnail.source" />
             }
             @if (FirstParagraph != null && FirstParagraph.Length > 0)
             {
-                <p style="margin: 0">@FirstParagraph</p>
+                <p style="margin: 0;">@FirstParagraph</p>
             }
         </div>         
   
@@ -50,6 +59,9 @@
     [Parameter]
     public bool AddToHistory { get => addToHistory; set { addToHistory = value; } }
 
+    [Parameter]
+    public EventCallback<bool> OnBookmarked { get; set; }
+
     private bool addToHistory = true;
 
     public string FirstParagraph;
@@ -70,6 +82,11 @@
 
         if (ArticleData.isInfo)
             addToHistory = false;
+
+        if (bookmarks.IsBookMark(ArticleData.pageid) && ArticleData.bookmarked == false)
+        {
+            ArticleData.bookmarked = true;
+        }
 
     }
 
@@ -117,6 +134,22 @@
         {
             history.AddToHistory(ArticleData);
         }
+    }
+
+    private async void Bookmark()
+    {
+        ArticleData.bookmarked = !ArticleData.bookmarked;
+
+        if (ArticleData.bookmarked)
+        {
+            bookmarks.AddBookMark(ArticleData);
+        } else
+        {
+            bookmarks.RemoveBookmark(ArticleData.pageid);
+        }
+
+        await OnBookmarked.InvokeAsync(ArticleData.bookmarked);
+
     }
 
 }

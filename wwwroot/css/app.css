@@ -125,6 +125,7 @@ main {
     margin-left: var(--default-margin);
     margin-right: var(--default-margin);
     max-width: 100%;
+    position: relative;
 }
 
 /*fit around content*/
@@ -151,7 +152,34 @@ main {
 
 .card-title {
     margin-bottom: var(--default-margin);
-    width: 100%;
+    width: calc(100% - 1.5rem);
+}
+
+.card-bookmark {
+    width: 30px;
+    height: 30px;
+    overflow: hidden;
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    border-radius: 5px;
+    width: 1.75rem;
+    height: 1.75rem;
+    opacity: 0.1;
+}
+
+.card-bookmark span {
+    position: absolute;
+    display: block;
+    left: -10px;
+    top: 2px;
+    width: 80px;
+    height: 20px;
+    transform: rotate(45deg);
+}
+
+.card-bookmark-active {
+    opacity: 1 !important;
 }
 
 .search-bar {

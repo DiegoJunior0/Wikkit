@@ -11,12 +11,9 @@ public class ArticleHistoryService
 
     private const int HistoryCount = 50;
     private const string historypref = "history";
-    private readonly WikipediaDataService dataService;
 
-    public ArticleHistoryService(WikipediaDataService dataService)
+    public ArticleHistoryService()
     {
-        this.dataService = dataService;
-
         LoadHistory();
     }
 

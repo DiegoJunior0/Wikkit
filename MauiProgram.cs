@@ -32,6 +32,7 @@ public static class MauiProgram
         builder.Services.AddSingleton<WikipediaDataService>().AddScoped<HttpClient>();
         builder.Services.AddScoped<SettingsService>();
 		builder.Services.AddScoped<ArticleHistoryService>();
+		builder.Services.AddScoped<BookmarkService>();
 
         return builder.Build();
 	}
