@@ -83,10 +83,7 @@
         if (ArticleData.isInfo)
             addToHistory = false;
 
-        if (bookmarks.IsBookMark(ArticleData.pageid) && ArticleData.bookmarked == false)
-        {
-            ArticleData.bookmarked = true;
-        }
+        ArticleData.bookmarked = bookmarks.IsBookMark(ArticleData.pageid);
 
     }
 
