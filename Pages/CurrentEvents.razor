@@ -59,9 +59,9 @@ else
         {            
             if (cont == "")            
             {                
-                ArticlePageData dateHeaderArticle = new();
+                ArticlePageData dateHeaderArticle 
+                    = await dataService.GetArticleInfo($"Portal:Current_events/{date.ToString("yyyy_MMMM_d")}");
                 dateHeaderArticle.title = date.ToString("yyyy MMMM d");
-                dateHeaderArticle.fullurl = $"https://en.wikipedia.org/wiki/Portal:Current_events/{date.ToString("yyyy_MMMM_d")}";
                 newArticles.Add(dateHeaderArticle);
             }
 

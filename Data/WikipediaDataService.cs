@@ -110,6 +110,33 @@ public partial class WikipediaDataService
 
     }
 
+    public async Task<ArticlePageData> GetArticleInfo(string url)
+    {
+        string query = $"action=query&format=json&titles={HttpUtility.UrlEncode(url)}" +
+            $"&prop=info|pageimages|description|extracts&inprop=url&pithumbsize=100" +
+            $"&exsentences=3&exintro=1&explaintext=1";
+
+        string jsonString = await GetWikiJson(query);
+
+        if (jsonString == "")
+        {
+            return new ArticlePageData { title = "No results returned", isInfo = true };
+        }
+
+        try
+        {
+            var data = JsonSerializer.Deserialize<QueryResponseInfo>(jsonString);
+
+            ArticlePageData articlePageData = data.query.pages.First().Value;
+
+            return articlePageData;
+        }
+        catch (Exception ex)
+        {
+            return new ArticlePageData { title = ex.Message, isInfo = true };
+        }
+    }
+
     public async Task<List<ArticlePageData>> GetMostViewed(int count, int offset)
     {
 
