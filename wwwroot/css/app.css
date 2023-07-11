@@ -91,7 +91,7 @@ main {
 }
 
 .navbar-toggler {
-    padding-top: var(--default-margin);
+
     padding-bottom: var(--default-margin);
     display: inline-block; 
     width: calc(100% - 2rem);
