@@ -22,13 +22,13 @@ else
 
             @foreach (var article in articles)
             {
-                <ArticleCard ArticleData=article AddToHistory=false
+                <ArticleCard ArticleData=article
                              LargeImage=@(article.title.StartsWith("Picture of the Day") ? true : false)
                              OnBookmarked="(e) => OnArticleBookmarked(e)"/>
             }
 
             <span id="observerTarget" style="@(remain == 0 ? "display:none": "display: inherit;") ">
-                <ArticleCard Title="Loading..." />
+                <ArticleCard Title="Loading..." IsInfo=true />
             </span>
 
         </InfiniteScroll>

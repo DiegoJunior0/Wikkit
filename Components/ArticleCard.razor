@@ -23,7 +23,7 @@
 
             <div class="card-title"><strong>@ArticleData.title</strong></div>
 
-            @if(!ArticleData.isInfo & ArticleData.pageid != 0)
+            @if(ArticleData.isInfo == false & IsInfo == false)
             {
                 <div class="card-bookmark @(ArticleData.bookmarked ? "card-bookmark-active" : "")"
                 @onclick=Bookmark @onclick:stopPropagation="true">
@@ -57,6 +57,9 @@
     public string Title { get; set; }
 
     [Parameter]
+    public bool IsInfo { get; set; }
+
+    [Parameter]
     public bool AddToHistory { get => addToHistory; set { addToHistory = value; } }
 
     [Parameter]
@@ -80,7 +83,7 @@
         if (Title != null)
             ArticleData.title = Title;
 
-        if (ArticleData.isInfo)
+        if (ArticleData.isInfo | IsInfo)
             addToHistory = false;
 
         ArticleData.bookmarked = bookmarks.IsBookMark(ArticleData.pageid);
