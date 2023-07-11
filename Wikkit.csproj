@@ -16,11 +16,11 @@
         <ApplicationTitle>Wikkit</ApplicationTitle>
 
         <!-- App Identifier -->
-        <ApplicationId>com.companyname.wikkit</ApplicationId>
+        <ApplicationId>com.henryskinner.wikkit</ApplicationId>
         <ApplicationIdGuid>C7565802-7E61-4C91-8EF5-6B160D96355B</ApplicationIdGuid>
 
         <!-- Versions -->
-        <ApplicationDisplayVersion>1.7</ApplicationDisplayVersion>
+        <ApplicationDisplayVersion>1.8</ApplicationDisplayVersion>
         <ApplicationVersion>1</ApplicationVersion>
 
         <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">14.2</SupportedOSPlatformVersion>
