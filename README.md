@@ -19,5 +19,5 @@ Currently supported feeds:
 # Feature Requests / Bugs
 Please feel free to submit feature requests and bugs as issues, but please note, as I am not planning to commit significant time to this post initial release, these may not be addressed.
 
-# Branching
-Released under the apache licence, so feel free to branch and create your own version, but please credit properly as per the licence.
+# Forks
+Released under the apache licence, so feel free to fork and create your own version, but please credit properly as per the licence.
