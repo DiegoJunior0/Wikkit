@@ -29,7 +29,8 @@ public static class MauiProgram
 #endif
         builder.Logging.AddDebug();
         builder.Services.AddScoped<Logger<WikipediaDataService>>();
-        builder.Services.AddSingleton<WikipediaDataService>().AddScoped<HttpClient>();
+		builder.Services.AddScoped<HttpClient>();
+        builder.Services.AddSingleton<WikipediaDataService>();
         builder.Services.AddScoped<SettingsService>();
 		builder.Services.AddScoped<ArticleHistoryService>();
 		builder.Services.AddScoped<BookmarkService>();

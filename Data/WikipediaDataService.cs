@@ -6,6 +6,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Text.Json;
 using System.Web;
 
@@ -15,12 +16,13 @@ public partial class WikipediaDataService
     
     private const string apiEndpoint = "https://en.wikipedia.org/w/api.php";
     private HttpClient _client;
-    private readonly ILogger<WikipediaDataService> logger;
 
-    public WikipediaDataService(HttpClient client, ILogger<WikipediaDataService> logger)
+    public WikipediaDataService(HttpClient client)
     {
         _client = client;
-        this.logger = logger;
+
+        ProductInfoHeaderValue productInfo = new(AppInfo.Current.Name, AppInfo.Current.VersionString);
+        _client.DefaultRequestHeaders.UserAgent.Add(productInfo);
     }
 
     private async Task<string> GetWikiJson(string query)
